@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": "Customizable Aim Trainer 4.3.2\n\nFeatures:\n◆ Customization for almost any setting\n◆ Pressure Mode: Bots shoot back at you\n◆ Multiple Bot Spawn Points\n◆ Reactive Bot AI\n◆ Choose from several different strafe patterns\n◆ And more...\n\nFind tutorials/help at workshop.codes/VXEAT\nReport bugs on my discord:discord.gg/YPQ5ETNT45\n",
+        "description": "Customizable Aim Trainer 4.4\n\nFeatures:\n◆ Customization for almost any setting\n◆ Pressure Mode: Bots shoot back at you\n◆ Multiple Bot Spawn Points\n◆ Reactive Bot AI\n◆ Choose from several different strafe patterns\n◆ And more...\n\nFind tutorials/help at workshop.codes/VXEAT\nReport bugs on my discord:discord.gg/YPQ5ETNT45\n",
         "modeName": "Customizable Aim Trainer - VXEAT"
     },
     "lobby": {
@@ -23,13 +23,6 @@ settings {
         }
     },
     "heroes": {
-        "team2": {
-            "pharah": {
-                "secondaryFireMaximumTime%": 500,
-                "secondaryFireRechargeRate%": 500,
-                "ability1Cooldown%": 0,
-            }
-        },
         "allTeams": {
             "general": {
                 "abilityCooldown%": 10,
@@ -71,7 +64,7 @@ globalvar default_bot_diff
 globalvar bounce_amount
 globalvar strafe_relatvity
 ## Bot Hero Variables
-globalvar hero_array 
+globalvar hero_array
 globalvar hero_array_index
 globalvar hero_proj_speed
 globalvar hero_proj_gravity
@@ -158,13 +151,13 @@ globalvar alt_mvmt_array
 globalvar data_loaded
 
 
-## Menu Variables 
+## Menu Variables
 globalvar menu_label
 globalvar submenu_start_index
 globalvar menu_max_pos
 globalvar menu_label_size
 globalvar menu_label_color
-globalvar sub_size 
+globalvar sub_size
 
 #Player variables
 ## Facing Variables
@@ -293,7 +286,7 @@ subroutine set_proj_facing
 subroutine set_healing_facing
 subroutine set_ground_facing
 subroutine set_feet_facing
-## Projectile Guide 
+## Projectile Guide
 subroutine update_projectile_data
 subroutine calc_proj_lead
 subroutine calc_arc_proj_lead
@@ -334,13 +327,13 @@ subroutine menu_act_toggle_movement_menu
 subroutine menu_act_toggle_spawn_menu
 subroutine menu_act_toggle_game_modes
 #### Submenu 1
-subroutine menu_act_proj_guide 
+subroutine menu_act_proj_guide
 subroutine menu_act_toggle_mercy
 subroutine menu_act_toggle_nano
 subroutine menu_act_toggle_kitsune
 subroutine menu_act_toggle_recall
 #### Submenu 2
-subroutine menu_act_toggle_ammo 
+subroutine menu_act_toggle_ammo
 subroutine menu_act_cycle_player_speed
 subroutine menu_act_strafe_stun
 subroutine menu_act_toggle_hs
@@ -410,7 +403,7 @@ rule "---->    Multipoint Spawn Settings: (Edit here for multipoint spawn preset
     bot_radius_array[2]  = 5
     bot_pool_array[2] = [Hero.ANA, Hero.BAPTISTE]
     bot_spawn_array[2] = vect(0,0,0)
-    
+
     #Slot 3
     bot_radius_array[3]  = 5
     bot_pool_array[3] = [Hero.ANA, Hero.BAPTISTE]
@@ -463,147 +456,191 @@ rule "---->    Multipoint Spawn Settings: (Edit here for multipoint spawn preset
 def set_map_default_spawn_pt():
     @Name "SUB: set_map_default_spawn_pt"
 
-    if getCurrentMap() == Map.ANTARCTIC_PENINSULA:
-        ## Labs
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(270,45,156)
-        ## Icebreaker
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(284,-12,-219)
-        ## Sublevel
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(-78,-153,60)
-    #elif getCurrentMap() == Map.BLIZZ_WORLD:
-    #    default_spawn_pt = vect(2.71,1.90,72.68)
-    elif getCurrentMap() == Map.BLIZZ_WORLD_WINTER:
-        default_spawn_pt = vect(2.71,1.90,72.68)
-    elif getCurrentMap() == Map.BUSAN:
-        ## Downtown
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(51.19, 11.00, -111.20)
-        ## Sanctuary
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(-328.56, 12, 131)
-        ## MEKA Base
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(217.81, 17.09, 230.12)
-    elif getCurrentMap() == Map.CIRCUIT_ROYAL:
-        default_spawn_pt = vect(-21.80,6,-32.25)
-    elif getCurrentMap() == Map.COLOSSEO:
-        default_spawn_pt = vect(0,2,-12)
-    elif getCurrentMap() == Map.DORADO:
-        default_spawn_pt = vect(20,1,5)
-    elif getCurrentMap() == Map.EICHENWALDE:
-        default_spawn_pt = vect(12,9,-72)
-    elif getCurrentMap() == Map.EICHENWALDE_HALLOWEEN:
-        default_spawn_pt = vect(12,9,-72)
-    elif getCurrentMap() == Map.ESPERANCA:
-        default_spawn_pt = vect(0,1,-30)
-    elif getCurrentMap() == Map.HANAMURA:
-        default_spawn_pt = vect(0,0,0)
-    elif getCurrentMap() == Map.HANAMURA_WINTER:
-        default_spawn_pt = vect(0,0,0)
-    elif getCurrentMap() == Map.HAVANA:
-        default_spawn_pt = vect(-15,5,-80)
-    elif getCurrentMap() == Map.HOLLYWOOD:
-        default_spawn_pt = vect(-21,8,10)
-    elif getCurrentMap() == Map.HOLLYWOOD_HALLOWEEN:
-        default_spawn_pt = vect(-21,8,10)
-    elif getCurrentMap() == Map.HORIZON_LUNAR_COLONY:
-        default_spawn_pt = vect(53.25,15,-74)
-    elif getCurrentMap() == Map.ILIOS:
-        ## Lighthouse
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(336,-22,-42)
-        ## Well
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(-203.95,1,-12)
-        ## Ruins
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(28.50, 70, -157)
-    elif getCurrentMap() == Map.JUNKERTOWN:
-        default_spawn_pt = vect(20, 10, -77)
-    elif getCurrentMap() == Map.KINGS_ROW:
-        default_spawn_pt = vect(-4.50, 5, -26)
-    elif getCurrentMap() == Map.KINGS_ROW_WINTER:
-        default_spawn_pt = vect(-4.50, 5, -26)
-    elif getCurrentMap() == Map.LIJIANG_TOWER:
-        ## Night Market
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(1.06, 1, -29.88)
-        ## Gardens
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(0, 96, 140)
-        ## Control Center
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(1, 270, 290)
-    elif getCurrentMap() == Map.LIJIANG_TOWER_LNY:
-        ## Night Market
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(1.06, 1, -29.88)
-        ## Gardens
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(0, 96, 140)
-        ## Control Center
-        elif getCurrentObjective() == 2:    
-            default_spawn_pt = vect(1, 270, 290)
-    elif getCurrentMap() == Map.NEPAL:
-        ## Village
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(-180, -86, 0)
-        ## Shrine
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(-43.50, 13, 0)
-        ## Sanctum
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(83, 130, 0)
-    elif getCurrentMap() == Map.NEW_JUNK_CITY:
-        default_spawn_pt = vect(0, 10, 0)
-    elif getCurrentMap() == Map.NEW_QUEEN_STREET:
-        default_spawn_pt = vect(0, 7, 4)
-    # Numbani not supported by overpy yet.
-    #elif getCurrentMap() == Map.NUMBANI:
-    #    default_spawn_pt = vect(82, 1, 2)
-    elif getCurrentMap() == Map.OASIS:
-        ## City Center
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(143, 5, 250)
-        ## Gardens
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(123.45, 12, -230)
-        ## University
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(147.50, 10, 251)
-    elif getCurrentMap() == Map.PARAISO:
-        default_spawn_pt = vect(-14, 10, -7)
-    elif getCurrentMap() == Map.PARIS:
-        default_spawn_pt = vect(-95.65, 14, -83.75)
-    elif getCurrentMap() == Map.RIALTO:
-        default_spawn_pt = vect(56, 7, -56)
-    elif getCurrentMap() == Map.ROUTE66:
-        default_spawn_pt = vect(60, 10, 14)
-    elif getCurrentMap() == Map.SAMOA:
-        ## Beach
-        if getCurrentObjective() == 0:
-            default_spawn_pt = vect(-330, 3.1, -110)
-        ## Downtown
-        elif getCurrentObjective() == 1:
-            default_spawn_pt = vect(234, 7, -256)
-        ## Volcano
-        elif getCurrentObjective() == 2:
-            default_spawn_pt = vect(28, 356, 375)
-    elif getCurrentMap() == Map.SHAMBALI_MONASTERY:
-        default_spawn_pt = vect(-42, 32, 182)
-    elif getCurrentMap() == Map.SURAVASA:
-        default_spawn_pt = vect(1, 10, 0)
-    elif getCurrentMap() == Map.TEMPLE_OF_ANUBIS:
-        default_spawn_pt = vect(-10, 12, 14)
-    elif getCurrentMap() == Map.VOLSKAYA:
-        default_spawn_pt = vect(-12, 2, 80)
-    elif getCurrentMap() == Map.WATCHPOINT_GIBRALTAR:
-        default_spawn_pt = vect(41, 4, -130)
-    else:
-        default_spawn_pt = vect(0,0,0)
+    switch getCurrentMap():
+        case Map.ANTARCTIC_PENINSULA:
+            switch getCurrentObjective():
+                ## Labs
+                case 0:
+                    default_spawn_pt = vect(270,45,156)
+                    break
+                ## Icebreaker
+                case 1:
+                    default_spawn_pt = vect(284,-12,-219)
+                    break
+                ## Sublevel
+                case 2:
+                    default_spawn_pt = vect(-78,-153,60)
+                    break
+            break
+        case Map.BLIZZ_WORLD:
+        case Map.BLIZZ_WORLD_WINTER:
+            default_spawn_pt = vect(2.71,1.90,72.68)
+            break
+        case Map.BUSAN:
+            switch getCurrentObjective():
+                ## Downtown
+                case 0:
+                    default_spawn_pt = vect(51.19, 11.00, -111.20)
+                    break
+                ## Sanctuary
+                case 1:
+                    default_spawn_pt = vect(-328.56, 12, 131)
+                    break
+                ## MEKA Base
+                case 2:
+                    default_spawn_pt = vect(217.81, 17.09, 230.12)
+                    break
+            break
+        case Map.CIRCUIT_ROYAL:
+            default_spawn_pt = vect(-21.80,6,-32.25)
+            break
+        case Map.COLOSSEO:
+            default_spawn_pt = vect(0,2,-12)
+            break
+        case Map.DORADO:
+            default_spawn_pt = vect(20,1,5)
+            break
+        case Map.EICHENWALDE:
+        case Map.EICHENWALDE_HALLOWEEN:
+            default_spawn_pt = vect(12,9,-72)
+            break
+        case Map.ESPERANCA:
+            default_spawn_pt = vect(0,1,-30)
+            break
+        case Map.HAVANA:
+            default_spawn_pt = vect(-15,5,-80)
+            break
+        case Map.HOLLYWOOD:
+        case Map.HOLLYWOOD_HALLOWEEN:
+            default_spawn_pt = vect(-21,8,10)
+            break
+        case Map.HORIZON_LUNAR_COLONY:
+            default_spawn_pt = vect(53.25,15,-74)
+            break
+        case Map.ILIOS:
+            switch getCurrentObjective():
+                ## Lighthouse
+                case 0:
+                    default_spawn_pt = vect(336,-22,-42)
+                    break
+                ## Well
+                case 1:
+                    default_spawn_pt = vect(-203.95,1,-12)
+                    break
+                ## Ruins
+                case 2:
+                    default_spawn_pt = vect(28.50, 70, -157)
+                    break
+            break
+        case Map.JUNKERTOWN:
+            default_spawn_pt = vect(20, 10, -77)
+            break
+        case Map.KINGS_ROW:
+            default_spawn_pt = vect(-4.50, 5, -26)
+            break
+        case Map.KINGS_ROW_WINTER:
+            default_spawn_pt = vect(-4.50, 5, -26)
+            break
+        case Map.LIJIANG_TOWER:
+        case Map.LIJIANG_TOWER_LNY:
+            switch getCurrentObjective():
+                ## Night Market
+                case 0:
+                    default_spawn_pt = vect(1.06, 1, -29.88)
+                    break
+                ## Gardens
+                case 1:
+                    default_spawn_pt = vect(0, 96, 140)
+                    break
+                ## Control Center
+                case 2:
+                    default_spawn_pt = vect(1, 270, 290)
+                    break
+            break
+        case Map.NEPAL:
+            switch getCurrentObjective():
+                ## Village
+                case 0:
+                    default_spawn_pt = vect(-180, -86, 0)
+                    break
+                ## Shrine
+                case 1:
+                    default_spawn_pt = vect(-43.50, 13, 0)
+                    break
+                ## Sanctum
+                case 2:
+                    default_spawn_pt = vect(83, 130, 0)
+                    break
+            break
+        case Map.NEW_JUNK_CITY:
+            default_spawn_pt = vect(0, 10, 0)
+            break
+        case Map.NEW_QUEEN_STREET:
+            default_spawn_pt = vect(0, 7, 4)
+            break
+        case Map.NUMBANI:
+            default_spawn_pt = vect(82, 1, 2)
+            break
+        case Map.OASIS:
+            switch getCurrentObjective():
+                ## City Center
+                case 0:
+                    default_spawn_pt = vect(143, 5, 250)
+                    break
+                ## Gardens
+                case 1:
+                    default_spawn_pt = vect(123.45, 12, -230)
+                    break
+                ## University
+                case 2:
+                    default_spawn_pt = vect(147.50, 10, 251)
+                    break
+            break
+        case Map.PARAISO:
+            default_spawn_pt = vect(-14, 10, -7)
+            break
+        case Map.PARIS:
+            default_spawn_pt = vect(-95.65, 14, -83.75)
+            break
+        case Map.RIALTO:
+            default_spawn_pt = vect(56, 7, -56)
+            break
+        case Map.ROUTE66:
+            default_spawn_pt = vect(60, 10, 14)
+            break
+        case Map.SAMOA:
+            switch getCurrentObjective():
+                ## Beach
+                case 0:
+                    default_spawn_pt = vect(-330, 3.1, -110)
+                    break
+                ## Downtown
+                case 1:
+                    default_spawn_pt = vect(234, 7, -256)
+                    break
+                ## Volcano
+                case 2:
+                    default_spawn_pt = vect(28, 356, 375)
+                    break
+            break
+        case Map.SHAMBALI_MONASTERY:
+            default_spawn_pt = vect(-42, 32, 182)
+            break
+        case Map.SURAVASA:
+            default_spawn_pt = vect(1, 10, 0)
+            break
+        case Map.TEMPLE_OF_ANUBIS:
+            default_spawn_pt = vect(-10, 12, 14)
+            break
+        case Map.VOLSKAYA:
+            default_spawn_pt = vect(-12, 2, 80)
+            break
+        case Map.WATCHPOINT_GIBRALTAR:
+            default_spawn_pt = vect(41, 4, -130)
+            break
+        default:
+            default_spawn_pt = vect(0,0,0)
+            break
 
 
 rule "Initialize: Workshop Settings":
@@ -613,8 +650,7 @@ rule "Initialize: Workshop Settings":
     console_ui = createWorkshopSetting(bool, "0. UI Settings", "Console UI", false, 0)
     show_main_hud = createWorkshopSetting(bool, "0. UI Settings", "Show HUD", true, 1)
     dmg_to_slot_array = createWorkshopSetting(bool, "0. UI Settings", "Show Damage Numbers", false, 2)
-    
-    
+
     ## Number of Bots
     bot_count = createWorkshopSetting(int[0:12], "1. Number of Bots (Overridden by in-game changes to settings)", "Number of Bots", 6, 0)
 
@@ -628,7 +664,7 @@ rule "Initialize: Workshop Settings":
     default_mvmt_type = createWorkshopSetting(enum["Random", "Default", "Random Long Strafes", "AD Strafes", "Custom Distance", "Fixed Shapes (CW)", "Fixed Shapes (CCW)", "No Movement", "Forward AD Strafes (Not Recommended)", "Forward (Not Recommended)"], "3. Bot Movement (Overridden by in-game changes to movement)", "Strafe Pattern", 1, 0)
     default_bot_diff = createWorkshopSetting(enum["custom", "very easy", "easy", "normal", "hard", "very hard"], "3. Bot Movement (Overridden by in-game changes to movement)", "Difficulty", 4, 1)
     custom_bot_speed = createWorkshopSetting(int[0:1000],   "3. Bot Movement (Overridden by in-game changes to movement)", "Bot Movement Speed", 100, 2)
-   
+
     ## Bot Movement Modifiers
     default_jump_enabled = createWorkshopSetting(bool, "3.1. Bot Movement Modifiers", "Bot Jumping", true, 0)
     default_jump_min = createWorkshopSetting(float[1:10], "3.1. Bot Movement Modifiers", "Bot Jumping - Minimum wait", 3.5, 1)
@@ -646,9 +682,9 @@ rule "Initialize: Workshop Settings":
     bounce_amount = createWorkshopSetting(int[0:100], "3.1. Bot Movement Modifiers", "Bouncing Bots (0 = off)", 0, 13)
     strafe_relatvity = createWorkshopSetting(enum["To Player", "To World"], "3.1. Bot Movement Modifiers", "AD Strafe Relativity", 0, 14)
     # Pressure Mode
-    pressure_type = createWorkshopSetting(enum["off", "killable", "unkillable"], "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Apply Pressure", 0, 0)
-    pressure_accuracy = createWorkshopSetting(int[1:100],  "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Pressure Difficulty", 50, 1)
-    pressure_beam = createWorkshopSetting(bool, "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bot Aim Visualizer", false, 2)
+    #pressure_type = createWorkshopSetting(enum["off", "killable", "unkillable"], "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Apply Pressure", 0, 0)
+    #pressure_accuracy = createWorkshopSetting(int[1:100],  "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Pressure Difficulty", 50, 1)
+    #pressure_beam = createWorkshopSetting(bool, "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bot Aim Visualizer", false, 2)
     # Pressure Mode Modifiers
     refresh_on_elim = createWorkshopSetting(bool, "4.1. Bot Pressure Modifiers (killable mode only)", "Eliminations / Deaths reset cooldowns", true, 0)
     heal_over_time = createWorkshopSetting(bool, "4.1. Bot Pressure Modifiers (killable mode only)", "Restore health after not taking damage", true, 1)
@@ -684,7 +720,7 @@ rule "Initialize: Workshop Settings":
     default_hero_array.append(createWorkshopSetting(bool, "7.1. Bot Tank Heroes (Overridden by in-game changes to bot heroes)", "Winston", false, 9))
     default_hero_array.append(createWorkshopSetting(bool, "7.1. Bot Tank Heroes (Overridden by in-game changes to bot heroes)", "Wrecking Ball", false, 10))
     default_hero_array.append(createWorkshopSetting(bool, "7.1. Bot Tank Heroes (Overridden by in-game changes to bot heroes)", "Zarya", false, 11))
-    
+
     ## Bot Damage Heroes Enabled
     default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Ashe", true, 0))
     default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Bastion", false, 1))
@@ -702,8 +738,9 @@ rule "Initialize: Workshop Settings":
     default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Symmetra", true, 13))
     default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Torbjörn", true, 14))
 	default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Tracer", true, 15))
-    default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Widowmaker", true, 16))
-    
+    default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Venture", true, 16))
+    default_hero_array.append(createWorkshopSetting(bool, "7.2. Bot Damage Heroes (Overridden by in-game changes to bot heroes)", "Widowmaker", true, 17))
+
     ## Bot Support Heroes Enabled
     default_hero_array.append(createWorkshopSetting(bool, "7.3. Bot Support Heroes (Overridden by in-game changes to bot heroes)", "Ana", true, 0))
     default_hero_array.append(createWorkshopSetting(bool, "7.3. Bot Support Heroes (Overridden by in-game changes to bot heroes)", "Baptiste", true, 1))
@@ -715,7 +752,7 @@ rule "Initialize: Workshop Settings":
     default_hero_array.append(createWorkshopSetting(bool, "7.3. Bot Support Heroes (Overridden by in-game changes to bot heroes)", "Mercy", true, 7))
     default_hero_array.append(createWorkshopSetting(bool, "7.3. Bot Support Heroes (Overridden by in-game changes to bot heroes)", "Moira", true, 8))
     default_hero_array.append(createWorkshopSetting(bool, "7.3. Bot Support Heroes (Overridden by in-game changes to bot heroes)", "Zenyatta", true, 9))
-    
+
     # Bot Behavior
     enable_all_abilities = createWorkshopSetting(bool, "8. Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Enable All Bot Abilities", false, 0)
     ## Bot tank Behavior (index 0 - 10)
@@ -730,8 +767,8 @@ rule "Initialize: Workshop Settings":
     bot_behavior.append(createWorkshopSetting(enum["Leap", "Leap, Primal", "Leap, Primal, Bubble"], "8.1. Tank Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Winston Bot Behavior", 1, 8))
     bot_behavior.append(createWorkshopSetting(enum["Roll", "Roll, Slam", "Roll, Slam, Shield", "Roll, Slam, Shields, Mines"], "8.1. Tank Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Wrecking Ball Bot Behavior", 1, 9))
     bot_behavior.append(createWorkshopSetting(enum["Rocket Jump", "Rocket Jump, Self Bubble", "Rocket Jump, Self Bubble, Grav"], "8.1. Tank Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Zarya Bot Behavior", 0, 10))
-    
-    ## Damage Bot Behavior (index 11 - 27)
+
+    ## Damage Bot Behavior (index 11 - 28)
     bot_behavior.append(createWorkshopSetting(enum["None", "Scope", "Scope, Coach Gun", "Scope, Coach Gun, Dynamite", "Scope, Coach Gun, Dynamite, B.O.B"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Ashe Bot Behavior", 4, 0))
     bot_behavior.append(createWorkshopSetting(enum["Recon Form", "Recon Form, Assault Form", "Recon Form, Assault Form, Grenade", "Recon, Assault, Grenade, Artillery Form"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Bastion Bot Behavior", 2, 1))
     bot_behavior.append(createWorkshopSetting(enum["Roll", "Roll, Mag Nade", "Roll, Mag Nade, High Noon"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Cassidy Bot Behavior", 1, 2))
@@ -748,9 +785,10 @@ rule "Initialize: Workshop Settings":
     bot_behavior.append(createWorkshopSetting(enum["None", "Teleporter", "Teleporter, Photon Barrier"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Symmetra Bot Behavior ", 1, 13))
     bot_behavior.append(createWorkshopSetting(enum["Overload", "Overload, Molten Core"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Torbjörn Bot Behavior", 0, 14))
     bot_behavior.append(createWorkshopSetting(enum["Blink", "Blink, Recall", "Blink, Recall, Pulse Bomb"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Tracer Bot Behavior", 1, 15))
-	bot_behavior.append(createWorkshopSetting(enum["None", "Scope", "Scope, Grapple (Simulated)", "Scope, Grapple (Simulated), Venom Mine"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Widowmaker Bot Behavior", 2, 16))
-    
-    ## Bot Support Heroes (index 28 - 36)
+    bot_behavior.append(createWorkshopSetting(enum["None", "Drill Dash", "Drill Dash, Burrow"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Venture Bot Behavior", 2, 16))
+	bot_behavior.append(createWorkshopSetting(enum["None", "Scope", "Scope, Grapple (Simulated)", "Scope, Grapple (Simulated), Venom Mine"], "8.2. Damage Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Widowmaker Bot Behavior", 2, 17))
+
+    ## Bot Support Heroes (index 29 - 38)
     bot_behavior.append(createWorkshopSetting(enum["None", "Scope", "Scope, Sleep", "Scope, Sleep, Damage Nade", "Scope, Sleep, Damage + Self Nade"], "8.3. Support Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Ana Bot Behavior", 3, 0))
     bot_behavior.append(createWorkshopSetting(enum["Exo Boots", "Exo Boots, Regen", "Exo Boots, Regen, Immo", "Exo Boots, Regen, Immo, Amp. Matrix"], "8.3. Support Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Baptiste Bot Behavior", 0, 1))
 	bot_behavior.append(createWorkshopSetting(enum["Whip Shot, Bash", "Whip Shot, Bash, Shield", "Whip Shot, Bash, Shield, Rally"], "8.3. Support Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Brigitte Bot Behavior", 0, 2))
@@ -763,8 +801,8 @@ rule "Initialize: Workshop Settings":
     bot_behavior.append(createWorkshopSetting(enum["Volley", "Volley, Discord", "Volley, Discord, Transcendence"], "8.3. Support Bot Behavior (Certain abilities need 'Bots React' and/or 'Pressure mode' to be on)", "Zenyatta Bot Behavior", 1, 9))
 
     show_debug_info = createWorkshopSetting(bool, "9. Server Settings", "Show Server Load and Coordinates", false, 0)
-    privileged_host = createWorkshopSetting(bool, "9. Server Settings", "Public Lobby Mode (Prevent Non-Host Players from Modifiying Bots)", false, 1) 
-    match_timer = createWorkshopSetting(int[0:60], "9. Server Settings", "Match Timer (in minutes) (Set for replay support)", 0, 2) 
+    privileged_host = createWorkshopSetting(bool, "9. Server Settings", "Public Lobby Mode (Prevent Non-Host Players from Modifiying Bots)", false, 1)
+    match_timer = createWorkshopSetting(int[0:60], "9. Server Settings", "Match Timer (in minutes) (Set for replay support)", 0, 2)
 
 rule "Initialize: Setup":
 
@@ -775,7 +813,7 @@ rule "Initialize: Setup":
         disableInspector()
 
 rule "Initialize: Static Global Variables":
-    
+
     data_loaded[0] = false
     data_loaded[1] = false
     data_loaded[2] = false
@@ -792,7 +830,7 @@ rule "Initialize: Static Global Variables":
     hero_react_dodge[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.90]
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.25, 0.25, 0.00]
     hero_name_array[hero_array_index] = "ChoiHyoBin"
-    
+
     hero_array_index += 1
     hero_array[hero_array_index] = Hero.DOOMFIST
     hero_proj_speed[hero_array_index] = [80,44,0,0,0]
@@ -804,7 +842,7 @@ rule "Initialize: Static Global Variables":
     hero_react_dodge[hero_array_index] = [0.00, 1.00, 0.50, 0.00, 0.90]
     hero_react_stun[hero_array_index] = [0.00, 0.50, 0.50, 0.75, 0.00]
     hero_name_array[hero_array_index] = "Danteh"
-    
+
     hero_array_index += 1
     hero_array[hero_array_index] = Hero.JUNKER_QUEEN
     hero_proj_speed[hero_array_index] = [80,30,0,0,0]
@@ -840,7 +878,7 @@ rule "Initialize: Static Global Variables":
     hero_react_dodge[hero_array_index] = [0.00, 0.00, 0.00, 0.75, 0.90]
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "Gator"
-    
+
     hero_array_index += 1
     hero_array[hero_array_index] = Hero.RAMATTRA
     hero_proj_speed[hero_array_index] = [80,0,0,30,0]
@@ -1118,6 +1156,18 @@ rule "Initialize: Static Global Variables":
     hero_name_array[hero_array_index] = "Proper"
 
     hero_array_index += 1
+    hero_array[hero_array_index] = Hero.VENTURE
+    hero_proj_speed[hero_array_index] = [50,0,0,0,0]
+    hero_proj_gravity[hero_array_index] = [0,0,0,0,0]
+    hero_proj_delta[hero_array_index] = [0,0,0,0,0]
+    hero_react_response[hero_array_index] = [1.00, 1.00, 1.00, 1.00, 1.00]
+    hero_react_eat[hero_array_index] = [0.0, 0.00, 0.00, 0.00, 0.00]
+    hero_react_block[hero_array_index] = [0.0, 0.00, 0.00, 0.00, 0.00]
+    hero_react_dodge[hero_array_index] = [0.0, 0.00, 0.00, 0.0, 0.00]
+    hero_react_stun[hero_array_index] = [0.00, 0.10, 0.00, 0.00, 0.00]
+    hero_name_array[hero_array_index] = "Rockmuncher"
+
+    hero_array_index += 1
     hero_array[hero_array_index] = Hero.WIDOWMAKER
     hero_proj_speed[hero_array_index] = [0,0,0,20,0]
     hero_proj_gravity[hero_array_index] = [0,0,0,9.84,0]
@@ -1128,7 +1178,12 @@ rule "Initialize: Static Global Variables":
     hero_react_dodge[hero_array_index] = [0.25, 0.00, 0.00, 0.75, 0.00]
     hero_react_stun[hero_array_index] = [0.00, 0.10, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "ANS"
-    
+
+    data_loaded[3] = true
+
+rule "Initialize: Static Global Variables Part 2":
+    @Condition data_loaded[3] == true
+
     hero_array_index += 1
     hero_array[hero_array_index] = Hero.ANA
     hero_proj_speed[hero_array_index] = [125,0,60,30,0]
@@ -1237,14 +1292,6 @@ rule "Initialize: Static Global Variables":
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "Viol2t"
 
-
-    
-    data_loaded[3] = true
-    
-rule "Initialize: Static Global Variables Part 2":
-
-    waitUntil(data_loaded[3] == true, 9999)
-
     hero_array_index += 1
     hero_array[hero_array_index] = Hero.ZENYATTA
     hero_proj_speed[hero_array_index] = [90,90,90,90,0]
@@ -1257,28 +1304,28 @@ rule "Initialize: Static Global Variables Part 2":
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "Jjonak"
 
-    data_loaded[0] = true    
+    data_loaded[0] = true
 
 
 rule "Initialize Dynamic Global Variables":
-        
+
 
     # Initialize some static data here since the static rule is too large
     splash_text = [
-        "Meow!", 
-        "Taxi your mercy!", 
+        "Meow!",
+        "Taxi your mercy!",
         "Good Luck, Have Fun everyone!",
-        "Try Out Pressure Mode!", 
+        "Try Out Pressure Mode!",
         "You're Swagging Out!",
         "Taxi your kiriko!",
         "Also Try TF2!",
         "Drink Water to Make Your Tracking Slaughter!",
-        "You can do it!", 
-        "Congratulations!", 
-        "Fighting!", 
-        "Boop!", 
-        "A group of penguins is a waddle!", 
-        "Believe",  
+        "You can do it!",
+        "Congratulations!",
+        "Fighting!",
+        "Boop!",
+        "A group of penguins is a waddle!",
+        "Believe",
         "Nervous? Me? Never!",
         "_A__ __FF",
         "I Like Seaweed!",
@@ -1299,9 +1346,9 @@ rule "Initialize Dynamic Global Variables":
                             ["100% (Default)", "125% (Kitsune)", "130% (Lucio Passive / JQ Shout)", "155% (Lucio Passive + Kitsune)", "160% (Lucio Amp)", "175% (Speed Boost Cap)"],
                             [Color.YELLOW, Color.ROSE, Color.LIME_GREEN, Color.TURQUOISE, Color.GREEN, Color.PURPLE, Color.BLACK]]
     opt_array_abilities = ["off", "primary", "secondary", "ability 1", "ability 2", "ultimate"]
-    opt_array_spawn_strings = ["Single Point", "Multipoint"] 
+    opt_array_spawn_strings = ["Single Point", "Multipoint"]
     opt_array_movement = [["randomized", "default", "random long strafes", "ad strafes", "Custom Distance", "Fixed Shapes (CW)", "Fixed Shapes (CCW)", "No Movement", "Forward AD Strafes", "Forward Movement Only"],
-    ["Custom", "Very Easy", "Easy", "Normal", "Hard", "Very Hard"], 
+    ["Custom", "Very Easy", "Easy", "Normal", "Hard", "Very Hard"],
     [Color.SKY_BLUE, Color.LIME_GREEN, Color.GREEN, Color.ORANGE, Color.RED, Color.BLACK],
     [custom_min_wait, 1.5, 0.75, 0.4, 0.25, 0.10],
     [custom_max_wait, 3.5, 1.75, 0.8, 0.45, 0.35]]
@@ -1360,7 +1407,7 @@ rule "Initialize Dynamic Global Variables":
 
 rule "Global Menu":
     @Event global
-    
+
     waitUntil(data_loaded[1] == true, 9999)
     stats_hud()
     settings_prompt_hud()
@@ -1379,23 +1426,23 @@ def stats_hud():
     hudSubtext(localPlayer, "Target Distance:  {0} m".format(round(distance(localPlayer.look_target.getEyePosition(), localPlayer.getEyePosition()))), HudPosition.LEFT, 0.5, Color.BLUE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # Pressure Damage Data
-    hudSubtext([i for i in localPlayer if pressure_type != 0], 
+    hudSubtext([i for i in localPlayer if pressure_type != 0],
     "KDR:  {0}".format(localPlayer.stat_kills / localPlayer.stat_deaths), HudPosition.LEFT, -0.01, Color.ROSE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if pressure_type != 0], 
+    hudSubtext([i for i in localPlayer if pressure_type != 0],
     "Deaths:  {0}".format(localPlayer.stat_deaths), HudPosition.LEFT, 0.11, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if pressure_type != 0], 
+    hudSubtext([i for i in localPlayer if pressure_type != 0],
     "Net Damage:  {0}".format(localPlayer.stat_dmg_dealt - localPlayer.stat_dmg_taken), HudPosition.LEFT, 0.51, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true], 
+    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
     "\nSpeed High Score:  {0}%".format(speed_score), HudPosition.RIGHT, -0.99, Color.BLACK, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true], 
+    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
     "Speed Multiplier:  {0}%".format(speed_multi), HudPosition.RIGHT,  -0.98, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true], 
+    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
     "Kills:  {0} / {1}".format(speed_kill_count, speed_kill_target), HudPosition.RIGHT,  -0.97, Color.RED, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     #Speed Mode Data
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true], 
+    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
     "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{0}".format(speed_timer), HudPosition.TOP, 666, Color.GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
-    
+
 
 # Lobby Rules
 rule "Set Match Timer":
@@ -1409,7 +1456,7 @@ rule "Set Match Timer":
 rule "Player Joined: Team 1 Defaults":
     @Event playerJoined
     @Team 1
-    
+
     eventPlayer.disableGamemodeHud()
     default_player_menu()
 
@@ -1464,7 +1511,7 @@ rule "Player Spawned":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.hasSpawned() == true
-    
+
     set_curr_hero_index()
     # Add new player to list
     if player_list[0] == null:
@@ -1496,7 +1543,7 @@ rule "Player Spawned":
 rule "Player Left":
     @Event playerLeft
     @Condition eventPlayer.isDummy() == false
-    
+
     if getPlayersInSlot(Team.1, eventPlayer.getSlot() + 6).isDummy() == true:
         destroyDummy(Team.1, eventPlayer.getSlot() + 6)
 
@@ -1518,7 +1565,7 @@ rule "Player Set look target":
 rule "Menu Controls: Toggle Menu with Interact":
     @Event eachPlayer
     @Team 1
-    # Change this condition to whatever button(s) you want to trigger the main menu. 
+    # Change this condition to whatever button(s) you want to trigger the main menu.
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
 
     if console_ui == true:
@@ -1583,7 +1630,7 @@ rule "Menu Controls: Up Scroll":
     # We use the player's movement keys to navigate the menu.
     # If you'd like to use a button input instead, change this condition.
     @Condition (console_ui == false and eventPlayer.getThrottle() == Vector.FORWARD) or (console_ui == true and eventPlayer.isHoldingButton(Button.ULTIMATE))
-    
+
     menu_up_check()
     while eventPlayer.menu_item_hidden[eventPlayer.menu_index] == true:
         menu_up_check()
@@ -1597,7 +1644,7 @@ rule "Menu Controls: Down Scroll":
     # We use the player's movement keys to navigate the menu.
     # If you'd like to use a button input instead, change this condition.
     @Condition (console_ui == false and eventPlayer.getThrottle() == Vector.BACKWARD) or (console_ui == true and eventPlayer.isHoldingButton(Button.JUMP))
-    
+
     menu_down_check()
     while eventPlayer.menu_item_hidden[eventPlayer.menu_index] == true:
         menu_down_check()
@@ -1615,7 +1662,7 @@ def menu_up_check():
         eventPlayer.menu_index -= 1
 
 def menu_down_check():
-        @Name "SUB: menu_down_check"    
+        @Name "SUB: menu_down_check"
 
     # If the menu index is equal to the end of our submenu
     if eventPlayer.menu_index >= submenu_start_index[eventPlayer.submenu_index+1] - 1:
@@ -1649,42 +1696,42 @@ def enable_player_input():
 
 def settings_prompt_hud():
     @Name "SUB: settings_prompt_hud"
-    
+
     # Settings Headers
     if console_ui == false:
-        hudSubheader([i for i in localPlayer if not localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if not localPlayer.menu_visible],
         "Press  {0}  to open menu".format(buttonString(Button.INTERACT)), HudPosition.LEFT, 1000, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Press  {0}  to close menu".format(buttonString(Button.INTERACT)), HudPosition.LEFT, 1001, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "—  Controls  —", HudPosition.LEFT, 1002, Color.BLACK, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Select: {0}".format(buttonString(Button.ABILITY_2)), HudPosition.LEFT, 1003, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Menu Up: Forward", HudPosition.LEFT, 1004, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Menu Down: Backward", HudPosition.LEFT, 1005, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Small Step: left / right", HudPosition.LEFT, 1006, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Large Step: {0} / {1}".format(buttonString(Button.ULTIMATE), buttonString(Button.ABILITY_2)), HudPosition.LEFT, 1007, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     else:
-        hudSubheader([i for i in localPlayer if not localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if not localPlayer.menu_visible],
         "Press  {0}  for 1 second to open menu".format(buttonString(Button.INTERACT)), HudPosition.LEFT, 1000, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Press  {0}  for 1 second to close menu".format(buttonString(Button.INTERACT)), HudPosition.LEFT, 1001, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "—  Controls  —", HudPosition.LEFT, 1002, Color.BLACK, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Select: {0}".format(buttonString(Button.ABILITY_2)), HudPosition.LEFT, 1003, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Menu Up: {0}".format(buttonString(Button.ULTIMATE)), HudPosition.LEFT, 1004, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Menu Down: {0}".format(buttonString(Button.JUMP)), HudPosition.LEFT, 1005, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Small Step: {0} / {1}".format(buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)), HudPosition.LEFT, 1006, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader([i for i in localPlayer if localPlayer.menu_visible], 
+        hudSubheader([i for i in localPlayer if localPlayer.menu_visible],
         "Large Step: {0} / {1}".format(buttonString(Button.SECONDARY_FIRE), buttonString(Button.PRIMARY_FIRE)), HudPosition.LEFT, 1007, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
@@ -1715,7 +1762,7 @@ def new_menu_label_header():
 
     hudHeader([i for i in localPlayer if localPlayer.menu_visible
         and localPlayer.submenu_index == evalOnce(sub_size)
-        and localPlayer.menu_label_hidden[evalOnce(menu_label_size)] != true], 
+        and localPlayer.menu_label_hidden[evalOnce(menu_label_size)] != true],
     "{0}".format(menu_label[evalOnce(menu_label_size)]),
     HudPosition.TOP,
     evalOnce(menu_max_pos),
@@ -1729,24 +1776,24 @@ def new_menu_label_subtext():
 
     hudSubtext([i for i in localPlayer if localPlayer.menu_visible
         and localPlayer.submenu_index == evalOnce(sub_size)
-        and localPlayer.menu_label_hidden[evalOnce(menu_label_size)] != true], 
+        and localPlayer.menu_label_hidden[evalOnce(menu_label_size)] != true],
     "{0}".format(menu_label[evalOnce(menu_label_size)]),
     HudPosition.TOP,
     evalOnce(menu_max_pos),
     menu_label_color[evalOnce(menu_label_size)],
     HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
-    
+
 
 def new_menu_item_selection():
     @Name "SUB: new_menu_item_selection"
 
     hudSubheader(
     localPlayer if localPlayer.menu_visible and localPlayer.submenu_index == evalOnce(sub_size) and localPlayer.menu_item_hidden[evalOnce(menu_opt_size)] != true else [],
-    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}".format(menu_on_opt_title[evalOnce(menu_opt_size)]), 
-    HudPosition.TOP, 
-    evalOnce(menu_max_pos), menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)], 
-    HudReeval.VISIBILITY_STRING_AND_COLOR, 
+    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}".format(menu_on_opt_title[evalOnce(menu_opt_size)]),
+    HudPosition.TOP,
+    evalOnce(menu_max_pos), menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)],
+    HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
 
 
@@ -1754,12 +1801,12 @@ def new_menu_item_toggle():
     @Name "SUB: new_menu_item_toggle"
 
     hudSubheader(localPlayer if localPlayer.menu_visible and localPlayer.submenu_index == evalOnce(sub_size) and localPlayer.menu_item_hidden[evalOnce(menu_opt_size)] != true else [],
-    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}{1}".format(menu_on_opt_title[evalOnce(menu_opt_size)], 
-    localPlayer.menu_opt_var[evalOnce(menu_opt_size)]), 
-    HudPosition.TOP, 
-    evalOnce(menu_max_pos), 
-    menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)], 
-    HudReeval.VISIBILITY_STRING_AND_COLOR, 
+    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}{1}".format(menu_on_opt_title[evalOnce(menu_opt_size)],
+    localPlayer.menu_opt_var[evalOnce(menu_opt_size)]),
+    HudPosition.TOP,
+    evalOnce(menu_max_pos),
+    menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)],
+    HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
 
 
@@ -1768,9 +1815,9 @@ def new_menu_item_cycle():
 
     hudSubheader(localPlayer if localPlayer.menu_visible and localPlayer.submenu_index == evalOnce(sub_size) and localPlayer.menu_item_hidden[evalOnce(menu_opt_size)] != true else [],
     "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■ {0} ←  {1}  → ".format(menu_on_opt_title[evalOnce(menu_opt_size)],
-    localPlayer.menu_opt_var[evalOnce(menu_opt_size)]), HudPosition.TOP, evalOnce(menu_max_pos), 
-    menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)], 
-    HudReeval.VISIBILITY_STRING_AND_COLOR, 
+    localPlayer.menu_opt_var[evalOnce(menu_opt_size)]), HudPosition.TOP, evalOnce(menu_max_pos),
+    menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)],
+    HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
 
 
@@ -1778,11 +1825,11 @@ def new_menu_item_cycle():
 def new_menu_item_cycle_bar():
     @Name "SUB: new_menu_item_cycle_bar"
 
-    hudSubheader(localPlayer if localPlayer.menu_visible and localPlayer.submenu_index == evalOnce(sub_size) and localPlayer.menu_item_hidden[evalOnce(menu_opt_size)] != true else [], 
-    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}  {1}".format(menu_on_opt_title[evalOnce(menu_opt_size)], 
+    hudSubheader(localPlayer if localPlayer.menu_visible and localPlayer.submenu_index == evalOnce(sub_size) and localPlayer.menu_item_hidden[evalOnce(menu_opt_size)] != true else [],
+    "{0}".format(menu_off_opt_title[evalOnce(menu_opt_size)]) if localPlayer.menu_index != evalOnce(menu_opt_size) else "■  {0}  {1}".format(menu_on_opt_title[evalOnce(menu_opt_size)],
     localPlayer.menu_opt_var[evalOnce(menu_opt_size)]),
     HudPosition.TOP,
-    evalOnce(menu_max_pos), 
+    evalOnce(menu_max_pos),
     menu_off_opt_color if localPlayer.menu_index != evalOnce(menu_opt_size) else menu_on_opt_color[evalOnce(menu_opt_size)],
     HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
@@ -1791,8 +1838,8 @@ def new_menu_item_cycle_bar():
 
     hudHeader(localPlayer if localPlayer.menu_visible and localPlayer.menu_index == evalOnce(menu_opt_size) and localPlayer.submenu_index == evalOnce(sub_size) else [],
     "{0} ←  {1}  →".format(localPlayer.bar_title[localPlayer.menu_index], localPlayer.bar_var[localPlayer.menu_index]),
-    HudPosition.TOP, 
-    evalOnce(menu_max_pos), 
+    HudPosition.TOP,
+    evalOnce(menu_max_pos),
     localPlayer.bar_color[evalOnce(menu_opt_size)],
     HudReeval.VISIBILITY_STRING_AND_COLOR,
     SpecVisibility.DEFAULT)
@@ -1805,7 +1852,7 @@ def misc_hud():
     # Debug info toggled via workshop settings menu
     if show_debug_info:
         hudSubheader(localPlayer,
-        "Load (Curr/Avg/Peak):  {0}  /  {1}  /  {2}".format(getServerLoad(),getAverageServerLoad(),getPeakServerLoad()), 
+        "Load (Curr/Avg/Peak):  {0}  /  {1}  /  {2}".format(getServerLoad(),getAverageServerLoad(),getPeakServerLoad()),
         HudPosition.RIGHT,
         -0.9,
         Color.WHITE,
@@ -1822,7 +1869,7 @@ def misc_hud():
 
 def default_player_menu():
     @Name "SUB: default_player_menu"
-    
+
     # Default menu variables
     eventPlayer.menu_index = 0
     eventPlayer.menu_opt_value = 0
@@ -1957,9 +2004,9 @@ def default_player_menu():
         eventPlayer.menu_opt_status[32] = spawn_radius
         eventPlayer.menu_opt_len[32] = 100
         ## Set Spawn Point
-        eventPlayer.menu_opt_status[33] = 0  
+        eventPlayer.menu_opt_status[33] = 0
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[34] = 0    
+        eventPlayer.menu_opt_status[34] = 0
         ## Pressure Mode Toggle
         eventPlayer.menu_opt_var[35] = opt_array_pressure[pressure_type]
         eventPlayer.menu_opt_status[35] = pressure_type
@@ -2015,7 +2062,7 @@ def menu_hud():
     menu_opt_size = -1
     sub_size = 0
     menu_off_opt_color = default_menu_off_index_color
-    
+
     increment_for_menu_label()
     menu_label[menu_label_size] = "Player Settings"
     menu_label_color[menu_label_size] = default_menu_label_color
@@ -2047,7 +2094,7 @@ def menu_hud():
     menu_label[menu_label_size] = "Bot Settings"
     menu_label_color[menu_label_size] = default_menu_label_color
     new_menu_label_header()
-    
+
     # Movement Settings
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Movement Menu"
@@ -2181,7 +2228,7 @@ def menu_hud():
     menu_label[menu_label_size] = "Bot Movement Settings"
     menu_label_color[menu_label_size] = default_menu_label_color
     new_menu_label_header()
-    
+
     ## Return to Main Menu
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Back to Main Menu"
@@ -2260,7 +2307,7 @@ def menu_hud():
     menu_label[menu_label_size] = "Bot Spawn Settings"
     menu_label_color[menu_label_size] = default_menu_label_color
     new_menu_label_header()
-    
+
     ## Return to Main Menu
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Back to Main Menu"
@@ -2298,7 +2345,7 @@ def menu_hud():
     menu_on_opt_title[menu_opt_size] = ""
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
     menu_hero_bar_color_set()
-    
+
     new_menu_item_cycle_bar()
 
     ## Spawn Radius Cycle
@@ -2330,7 +2377,7 @@ def menu_hud():
     menu_label[menu_label_size] = "Game Mode Settings"
     menu_label_color[menu_label_size] = default_menu_label_color
     new_menu_label_header()
-    
+
     ## Return to Main Menu
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Back to Main Menu"
@@ -2427,19 +2474,19 @@ def menu_hero_bar_color_set():
 
 def menu_pressure_cycle_color_set():
     @Name "SUB: menu_pressure_cycle_color_set"
-    
+
     if pressure_accuracy == 100:
         menu_on_opt_color[eventPlayer.menu_index] = Color.BLACK
     elif pressure_accuracy >= 90:
-        menu_on_opt_color[eventPlayer.menu_index] = Color.RED  
+        menu_on_opt_color[eventPlayer.menu_index] = Color.RED
     elif pressure_accuracy >= 80:
-        menu_on_opt_color[eventPlayer.menu_index] = Color.ROSE  
+        menu_on_opt_color[eventPlayer.menu_index] = Color.ROSE
     elif pressure_accuracy >= 70:
         menu_on_opt_color[eventPlayer.menu_index] = Color.ORANGE
     elif pressure_accuracy >= 50:
         menu_on_opt_color[eventPlayer.menu_index] = Color.YELLOW
     elif pressure_accuracy >= 30:
-        menu_on_opt_color[eventPlayer.menu_index] = Color.GREEN        
+        menu_on_opt_color[eventPlayer.menu_index] = Color.GREEN
     else:
         menu_on_opt_color[eventPlayer.menu_index] = Color.SKY_BLUE
 
@@ -2449,7 +2496,7 @@ rule "Menu Actions: Input Read":
     @Event eachPlayer
     @Condition eventPlayer.menu_visible == true
     @Condition (console_ui == false and (eventPlayer.isHoldingButton(Button.ULTIMATE) == true or eventPlayer.isHoldingButton(Button.ABILITY_2) == true or eventPlayer.getThrottle() == Vector.LEFT or eventPlayer.getThrottle() == Vector.RIGHT) == true) or (console_ui == true and (eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) or eventPlayer.isHoldingButton(Button.ABILITY_1) or eventPlayer.isHoldingButton(Button.ABILITY_2)))
-    
+
     # We use the player variable menu_input to tell the subroutines we call that the player inputed one of our selection keys.
     if console_ui == false:
         if eventPlayer.getThrottle() == Vector.LEFT:
@@ -2514,18 +2561,18 @@ rule "Menu Actions: Input Read":
         elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
             menu_act_strafe_stun()
             eventPlayer.menu_wait = 0.02
-        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:   
+        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_toggle_hs()
     elif eventPlayer.submenu_index == 3:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_movement_menu()
         elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
-            menu_act_cycle_pattern() 
+            menu_act_cycle_pattern()
         elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value:
-            menu_act_cycle_min_dist() 
+            menu_act_cycle_min_dist()
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
-            menu_act_cycle_max_dist() 
+            menu_act_cycle_max_dist()
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_points()
@@ -2551,7 +2598,7 @@ rule "Menu Actions: Input Read":
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_spawn_menu()
         elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
-            menu_act_num_bots() 
+            menu_act_num_bots()
         elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value:
             menu_act_toggle_spawn_type()
         elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
@@ -2568,27 +2615,27 @@ rule "Menu Actions: Input Read":
             menu_act_toggle_game_modes()
         elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
             menu_act_cycle_pressure_mode()
-        elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value:
             menu_act_cycle_accuracy()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
             menu_act_toggle_speed()
-        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_timer()
             eventPlayer.menu_wait = 0.01
-        elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
             menu_act_cycle_increment()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value:
             menu_act_cycle_decrement()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value: 
+        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value:
             menu_act_cycle_speed_kills()
 
     wait(eventPlayer.menu_wait)
     if RULE_CONDITION:
         goto RULE_START
-            
+
 ## Menu Action helpers
 def menu_status_io_toggle():
     @Name "SUB: menu_status_io_toggle"
@@ -2622,7 +2669,7 @@ def menu_status_cycle():
 ### Submenu 0 - Change Hero
 def menu_act_change_hero():
     @Name "SUB: menu_act_change_hero"
-    
+
     #reset menu variable
     destroyEffect(eventPlayer.proj_effects[0])
     destroyEffect(eventPlayer.proj_effects[1])
@@ -2639,7 +2686,7 @@ def menu_act_change_hero():
     # Allow Player to select hero
     player_list.remove(eventPlayer)
     eventPlayer.setAllowedHeroes(eventPlayer.getAllowedHeroes().exclude(eventPlayer.getCurrentHero()))
-    eventPlayer.resetHeroAvailability()   
+    eventPlayer.resetHeroAvailability()
 
 ### Submenu 0 - Toggle Assists
 def menu_act_toggle_assists_menu():
@@ -2652,10 +2699,10 @@ def menu_act_toggle_assists_menu():
         eventPlayer.submenu_index = 0
         eventPlayer.menu_index = 1 + submenu_start_index[eventPlayer.submenu_index]
 
-        
+
 def menu_act_toggle_mercy():
     @Name "SUB: menu_act_toggle_mercy"
-    
+
     if eventPlayer.menu_opt_value == 1:
         menu_status_io_toggle()
         smallMessage(eventPlayer, "    Deactivating Mercy Damage Boost")
@@ -2720,7 +2767,7 @@ def menu_act_toggle_recall():
         show_recall.remove(eventPlayer)
     else:
         show_recall.append(eventPlayer)
-        
+
 rule "Assist Bot: Kiriko Kitsune Rush":
     @Event eachPlayer
     @Team 1
@@ -2728,8 +2775,8 @@ rule "Assist Bot: Kiriko Kitsune Rush":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == true
     @Condition (getPlayersInSlot(eventPlayer.getSlot() - 6, Team.1)).isAlive() == true
-    
-    
+
+
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
     eventPlayer.setInvisibility(Invis.ALL)
     eventPlayer.startFacing(directionTowards( eventPlayer.getEyePosition(), (getPlayersInSlot(eventPlayer.getSlot() - 6, Team.1)).getEyePosition()), default_turn_rate, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
@@ -2754,7 +2801,7 @@ def menu_act_toggle_modifiers_menu():
 
 def menu_act_cycle_player_speed():
     @Name "SUB: menu_act_cycle_player_speed - Player Speed Toggle"
-    
+
     if eventPlayer.menu_input == 0:
         if eventPlayer.custom_speed < 100 or eventPlayer.custom_speed >= 175:
             eventPlayer.custom_speed = 100
@@ -2866,7 +2913,7 @@ rule "Player Modifier: Headshot Only":
             kill(victim, eventPlayer)
     else:
         heal(victim, null, eventDamage)
-        
+
 
 
 
@@ -2902,7 +2949,7 @@ def menu_act_proj_guide():
 def menu_act_toggle_movement_menu():
     @Name "SUB: menu_act_toggle_movement_menu"
 
-    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly 
+    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly
     #waitUntil(eventPlayer.isHoldingButton(Button.ABILITY_2) == false and eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false,9999)
     if eventPlayer.submenu_index == 0:
         eventPlayer.submenu_index = 3
@@ -2977,7 +3024,7 @@ def menu_act_cycle_max_dist():
 
 def menu_act_cycle_points():
     @Name "SUB: menu_act_cycle_points"
-    
+
     menu_status_cycle()
     custom_strafe_points = eventPlayer.menu_opt_value + 1
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0}".format(custom_strafe_points)
@@ -3021,7 +3068,7 @@ def menu_act_cycle_min_wait():
         custom_min_wait = 0.01
     if custom_min_wait < 0.01:
         custom_min_wait = custom_max_wait
-            
+
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0} s".format(custom_min_wait)
     mvmt_min_wait = custom_min_wait
 
@@ -3046,7 +3093,7 @@ def menu_act_cycle_max_wait():
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0} s".format(custom_max_wait)
     mvmt_max_wait = custom_max_wait
 
-    
+
 def menu_act_cycle_bot_speed():
     @Name "SUB: menu_act_cycle_bot_speed"
 
@@ -3118,7 +3165,7 @@ rule "Bouncing Bots":
     @Team 2
     @Condition eventPlayer.isOnGround() == true
     @Condition bounce_amount > 0
-    
+
     if eventPlayer.getPosition().x > eventPlayer.spawn_pt.x and eventPlayer.getPosition().z > eventPlayer.spawn_pt.z:
         eventPlayer.applyImpulse(vect(-1,1,-1), bounce_amount, Relativity.TO_PLAYER, Impulse.INCORPORATE_CONTRARY_MOTION)
     elif eventPlayer.getPosition().x > eventPlayer.spawn_pt.x and eventPlayer.getPosition().z < eventPlayer.spawn_pt.z:
@@ -3131,11 +3178,11 @@ rule "Bouncing Bots":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 def menu_act_toggle_spawn_menu():
     @Name "SUB: menu_act_toggle_spawn_menu"
 
-    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly 
+    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly
     #waitUntil(eventPlayer.isHoldingButton(Button.ABILITY_2) == false and eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false,9999)
     if eventPlayer.submenu_index == 0:
         eventPlayer.submenu_index = 4
@@ -3171,10 +3218,10 @@ def menu_act_num_bots():
         menu_on_opt_title[eventPlayer.menu_index+4] = "Slot {0} Radius".format(bot_slot)
         menu_off_opt_title[eventPlayer.menu_index+5] = "Set Slot {0} Spawn Point".format(bot_slot)
         menu_on_opt_title[eventPlayer.menu_index+5] = "Set Slot {0} Spawn Point".format(bot_slot)
-        
+
     eventPlayer.menu_reset_bots = true
     smallMessage(eventPlayer, "    Bot count updated. Exit menu to refresh bots.")
-    
+
 
 def menu_act_toggle_spawn_type():
     @Name "SUB: menu_act_toggle_spawn_type"
@@ -3202,7 +3249,7 @@ def menu_act_toggle_spawn_type():
     spawn_type = eventPlayer.menu_opt_value
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = opt_array_spawn_strings[eventPlayer.menu_opt_value]
     eventPlayer.menu_opt_status[eventPlayer.menu_index] = eventPlayer.menu_opt_value
-    
+
 
 def menu_act_cycle_slot():
     @Name "SUB: menu_act_cycle_slot"
@@ -3278,20 +3325,20 @@ def menu_act_set_spawn_pt():
     @Name "SUB: menu_act_set_spawn_pt"
     default_spawn_pt = eventPlayer.getPosition()
     if spawn_type == 0:
-        
+
         for bot_index in range(0, bot_count, 1):
             bot_spawn_array[bot_index] = default_spawn_pt
-        smallMessage(eventPlayer, "    Spawn Point Set")      
+        smallMessage(eventPlayer, "    Spawn Point Set")
     else:
         bot_spawn_array[bot_slot] = default_spawn_pt
         smallMessage(eventPlayer, "    Bot {} Spawn Point Set".format(bot_slot))
         bot_gen_index = bot_slot
-    eventPlayer.menu_reset_bots = true 
-        
+    eventPlayer.menu_reset_bots = true
+
 def menu_act_toggle_game_modes():
     @Name "SUB: menu_act_toggle_game_modes"
 
-    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly 
+    # We wait until the player releases both input buttons so the rule that control the submenu's first index action does not trigger unintendedly
     #waitUntil(eventPlayer.isHoldingButton(Button.ABILITY_2) == false and eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false,9999)
     if eventPlayer.submenu_index == 0:
         eventPlayer.submenu_index = 5
@@ -3344,7 +3391,7 @@ def menu_act_toggle_speed():
         smallMessage(eventPlayer, "    Speed Mode disabled")
     else:
         speed_mode_enabled = true
-        
+
         speed_multi = speed_base
         speed_score = speed_base
         speed_timer = speed_max_time
@@ -3356,7 +3403,7 @@ def menu_act_toggle_speed():
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = false
         smallMessage(eventPlayer, "    Speed Mode enabled")
-        
+
 
 def menu_act_cycle_timer():
     @Name "SUB: menu_act_cycle_timer"
@@ -3383,9 +3430,9 @@ def menu_act_cycle_increment():
     menu_status_cycle()
     speed_increment = eventPlayer.menu_opt_value
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0}%".format(speed_increment)
-    
 
-    
+
+
 def menu_act_cycle_decrement():
     @Name "SUB: menu_act_cycle_decrement"
 
@@ -3408,8 +3455,8 @@ rule "Player Ability: Ultimate Refresh":
     @Team 1
     @Condition eventPlayer.getUltCharge() != 100
     @Condition eventPlayer.isUsingUltimate() == false
-    
-    
+
+
     eventPlayer.setUltCharge(100)
 
 
@@ -3418,7 +3465,7 @@ rule "Player Ability: Heal if no damage in killable":
     @Team 1
     @Condition pressure_type == 1
     @Condition heal_over_time == true
-    
+
     wait(4, Wait.RESTART_WHEN_TRUE)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
@@ -3427,7 +3474,7 @@ rule "Player Ability: Heal if no damage default":
     @Event playerTookDamage
     @Team 1
     @Condition pressure_type != 1
-    
+
     wait(0.25)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
@@ -3446,7 +3493,7 @@ rule "Player Ability: Punishment for Death":
     @Condition pressure_type == 1
     @Condition eventPlayer.getHealth() <= 1
     @Condition punish_deaths == true
-    
+
     eventPlayer.setStatusEffect(eventPlayer, Status.STUNNED, 0.5)
     if attacker.isAlive():
         attacker.setHealth(attacker.getMaxHealth())
@@ -3468,7 +3515,7 @@ rule "Player Ability: Grant Zarya Charge outside of pressure":
     @Hero zarya
     @Condition eventPlayer.isUsingAbility1() == true
     @Condition pressure_type == 0
-    
+
     damage(eventPlayer, null, 200)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
@@ -3479,14 +3526,14 @@ rule "Player Ability: Grant Doom Power Punch outside of pressure":
     @Hero doomfist
     @Condition eventPlayer.isUsingAbility2() == true
     @Condition pressure_type == 0
-    
+
     wait(0.75, Wait.ABORT_WHEN_FALSE)
     eventPlayer.startDoT(eventPlayer.look_target, 0.25, 800)
     wait(0.25, Wait.ABORT_WHEN_FALSE)
     eventPlayer.stopAllDoT()
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
-    
+
 rule "Player Ability: Punish No Strafing":
     @Event eachPlayer
     @Team 1
@@ -3533,21 +3580,21 @@ def reset_player_resources():
     eventPlayer.setAbilityCooldown(Button.SECONDARY_FIRE,0)
     eventPlayer.setAbilityCooldown(Button.ABILITY_1,0)
     eventPlayer.setAbilityCooldown(Button.ABILITY_2,0)
-    
+
 
 # Stat Trackers
 rule "Stats: Timer Start":
     @Event playerDealtDamage
     @Team 1
     @Condition eventPlayer.stat_timer == 0
-    
+
     chase(eventPlayer.stat_timer, 9999, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
 
 rule "Stats: Elimination":
     @Event playerDealtFinalBlow
     @Team 1
-    
+
     eventPlayer.stat_kills += 1
 
 
@@ -3555,7 +3602,7 @@ rule "Stats: Pressure Mode Damage Dealt":
     @Event playerDealtDamage
     @Team 1
     @Condition pressure_type != 0
-    
+
     eventPlayer.stat_dmg_dealt += eventDamage
 
 
@@ -3564,7 +3611,7 @@ rule "Stats: Pressure Mode killable track deaths":
     @Team 1
     @Condition pressure_type == 1
     @Condition eventPlayer.getHealth() <= 1
-    
+
     eventPlayer.stat_deaths += 1
     if punish_deaths == true:
         eventPlayer.punish_timer = 1
@@ -3580,7 +3627,7 @@ rule "Stats: Pressure Mode Damage Recieved":
     @Event playerTookDamage
     @Team 1
     @Condition pressure_type != 0
-    
+
     eventPlayer.stat_dmg_taken += eventDamage
 
 
@@ -3588,7 +3635,7 @@ rule "Show Player Damage by BluJay (https://workshop.codes/7CZFC)":
     @Event eachPlayer
     @Team 2
     @Condition dmg_to_slot_array == true
-    
+
     createInWorldText(null if localPlayer.stat_dmg_to_slot[eventPlayer.getSlot()] == 0 or localPlayer == eventPlayer else localPlayer, round(localPlayer.stat_dmg_to_slot[eventPlayer.getSlot()]), updateEveryTick(vect(eventPlayer.getEyePosition().x, eventPlayer.getEyePosition().y + 1.4, eventPlayer.getEyePosition().z)), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
 
 
@@ -3596,13 +3643,13 @@ rule "Player Took Damage by BluJay (https://workshop.codes/7CZFC)":
     @Event playerTookDamage
     @Team 2
     @Condition dmg_to_slot_array == true
-    
+
     attacker.stat_dmg_to_slot[victim.getSlot()] += eventDamage
     wait(1.5, Wait.RESTART_WHEN_TRUE)
     attacker.stat_dmg_to_slot[victim.getSlot()] = 0
 
 
-# Bot Creation / Deletion 
+# Bot Creation / Deletion
 def create_bot():
     @Name "SUB: BotGen: create_bot"
     if bot_pool_array[bot_gen_index][0] != null:
@@ -3674,7 +3721,7 @@ def initialize_bot():
     if eventPlayer.mvmt_type <= 2:
         set_default_pathing()
     elif eventPlayer.mvmt_type == 5 or eventPlayer.mvmt_type == 6:
-        set_fixed_pathing()  
+        set_fixed_pathing()
 
 
 rule "Bot Spawn: Setup":
@@ -3682,7 +3729,7 @@ rule "Bot Spawn: Setup":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.hasSpawned() == true
-    
+
     initialize_bot()
 
 
@@ -3690,7 +3737,7 @@ rule "Bot Died: Swap Hero":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.isDead() == true
-    
+
     # Select new hero
     bot_pool_array[eventPlayer.getSlot()] = random.shuffle(bot_pool_array[eventPlayer.getSlot()])
     eventPlayer.least_hero = 9999
@@ -3770,20 +3817,20 @@ rule "Bot Pathing: Initialization":
     eventPlayer.path_index.append(6)
     eventPlayer.path_index.append(7)
 
-    
+
 rule "Bot Pathing: Randomized Strafes":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition default_mvmt_type == 0
     @Condition eventPlayer.mvmt_type_lock == false
-    
+
     eventPlayer.mvmt_type = random.randint(1,3)
     wait(5, Wait.ABORT_WHEN_FALSE)
     if RULE_CONDITION:
         goto RULE_START
 
-    
+
 rule "Bot Pathing: Movement Handler: Movement Type 1 default Pathing Speed Off":
     @Event eachPlayer
     @Team 2
@@ -3816,12 +3863,12 @@ rule "Bot Pathing: Movement Handler: Movement Type 2 default Pathing + rand long
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 2
-    
+
     eventPlayer.bot_pathing_var = random.randint(0, 9)
     if eventPlayer.bot_pathing_var < 3:
         change_pathing()
         wait(random.uniform(mvmt_min_wait + eventPlayer.bot_pathing_var * 0.25, mvmt_max_wait + eventPlayer.bot_pathing_var * 0.5), Wait.ABORT_WHEN_FALSE)
-    else:            
+    else:
         change_pathing()
         wait(random.uniform(mvmt_min_wait, mvmt_max_wait), Wait.ABORT_WHEN_FALSE)
 
@@ -3836,14 +3883,14 @@ rule "Bot Pathing: default pathing - Too close to path destination":
     @Condition eventPlayer.isAlive() == true
     @Condition (distance(eventPlayer.getPosition(), eventPlayer.path_pos[eventPlayer.path_dir]) <= 1.5)
     @Condition eventPlayer.mvmt_type == 1 or eventPlayer.mvmt_type == 2
-    
+
     eventPlayer.path_index.remove(eventPlayer.path_dir)
     eventPlayer.path_old_dir = eventPlayer.path_dir
     eventPlayer.path_dir = random.choice(eventPlayer.path_index)
     eventPlayer.path_index.append(eventPlayer.path_old_dir)
     eventPlayer.startThrottleInDirection(localVector(eventPlayer.path_pos[eventPlayer.path_dir], eventPlayer, Transform.ROTATION_AND_TRANSLATION), 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
     wait(1, Wait.ABORT_WHEN_FALSE)
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -3854,7 +3901,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_PLAYER":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
     @Condition strafe_relatvity == 0
-    
+
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
         eventPlayer.bot_pathing_var = 1
@@ -3873,7 +3920,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_WORLD":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
     @Condition strafe_relatvity == 1
-    
+
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
         eventPlayer.bot_pathing_var = 1
@@ -3981,7 +4028,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 7 no movement":
 
     if RULE_CONDITION:
         goto RULE_START
-        
+
 
 rule "Bot Pathing: Movement Handler - mvmt_type 8 Forward AD Strafes":
     @Event eachPlayer
@@ -4022,7 +4069,7 @@ rule "Bot Default Movement: Bot jumping":
     @Condition eventPlayer.isAlive() == true
     @Condition default_jump_enabled == true
     @Condition eventPlayer.bot_disable_jump == false
-    
+
     wait(random.uniform(default_jump_min, default_jump_max), Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.JUMP)
     if RULE_CONDITION:
@@ -4036,7 +4083,7 @@ rule "Bot Default Movement: Bot crouching":
     @Condition default_crouch_enabled == true
     @Condition eventPlayer.bot_disable_crouch == false
 
-    
+
     wait(random.uniform(default_crouch_min, default_crouch_max), Wait.ABORT_WHEN_FALSE)
     eventPlayer.startForcingButton(Button.CROUCH)
     wait(random.uniform(default_uncrouch_min, default_uncrouch_max))
@@ -4057,7 +4104,7 @@ def change_pathing():
 
 def set_default_pathing():
     @Name "SUB: set_default_pathing"
-    
+
     eventPlayer.path_dir = 0
 
     if eventPlayer.getSlot() == 3 or eventPlayer.getSlot() == 8:
@@ -4106,13 +4153,13 @@ def set_default_pathing():
         eventPlayer.path_pos[6] = eventPlayer.spawn_pt + vect(-eventPlayer.mvmt_rad_1, 0, eventPlayer.mvmt_rad_1)
         eventPlayer.path_pos[7] = eventPlayer.spawn_pt + vect(-eventPlayer.mvmt_rad_1, 0, 0)
 
-    
+
 def set_fixed_pathing():
     @Name "SUB: set_fixed_pathing"
 
     for eventPlayer.bot_pathing_var in range(0,custom_strafe_points, 1):
         eventPlayer.path_pos[eventPlayer.bot_pathing_var] = eventPlayer.spawn_pt + vect(spawn_radius * cos(6.28 * eventPlayer.bot_pathing_var / custom_strafe_points),0, spawn_radius * sin(6.28 * eventPlayer.bot_pathing_var / custom_strafe_points))
-    
+
 
 def update_projectile_data():
     @Name "update_projectile_data"
@@ -4121,7 +4168,7 @@ def update_projectile_data():
     eventPlayer.proj_gravity = hero_proj_gravity[eventPlayer.curr_hero_index][eventPlayer.proj_type-1]
     eventPlayer.proj_delta = hero_proj_delta[eventPlayer.curr_hero_index][eventPlayer.proj_type-1]
 
-        
+
 rule "Calculate Player Projectile Trajectory":
     @Event eachPlayer
     @Team 1
@@ -4214,7 +4261,7 @@ def set_ground_facing():
 
 
 def calc_proj_lead():
-    
+
     @Name "SUB: calc_proj_lead (KJRR5P)"
 
     eventPlayer.proj_delta_xz = eventPlayer.look_target.getEyePosition() - eventPlayer.getEyePosition()
@@ -4233,7 +4280,7 @@ def calc_proj_lead():
 
 
 def calc_arc_proj_lead():
-    
+
     @Name "SUB: calc_arc_proj_lead (KJRR5P)"
 
     eventPlayer.proj_calc_a = eventPlayer.proj_speed ** 2 - dotProduct(eventPlayer.look_target.getVelocity(), eventPlayer.look_target.getVelocity())
@@ -4315,7 +4362,7 @@ rule "Bot Pressure: Toggle Off":
     eventPlayer.pressure_target.apply_pressure = false
     eventPlayer.pressure_target.pressure_target = null
     eventPlayer.pressure_target = null
-    
+
 
 rule "Bot Pressure: Set Pressure Off":
     @Event eachPlayer
@@ -4331,7 +4378,7 @@ rule "Bot Pressure: Set Pressure Off":
     eventPlayer.proj_type = 0
     if eventPlayer.getCurrentHero() != Hero.MERCY:
         set_default_facing()
-    
+
 
 rule "Bot Pressure: Look Offset":
     @Event eachPlayer
@@ -4368,13 +4415,13 @@ rule "Bot Pressure: Look Offset":
     wait(0.5)
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
 rule "Bot Pressure: Unkillable Bot Enable":
     @Event eachPlayer
     @Team 2
     @Condition pressure_type == 2
-    
+
     eventPlayer.setStatusEffect(eventPlayer, Status.UNKILLABLE, 9999)
 
 
@@ -4382,7 +4429,7 @@ rule "Bot Pressure: Unkillable Bot Disable":
     @Event eachPlayer
     @Team 2
     @Condition pressure_type != 2
-    
+
     eventPlayer.clearStatusEffect(Status.UNKILLABLE)
 
 
@@ -4390,7 +4437,7 @@ rule "Bot Pressure: Unkillable Bot Took Damage":
     @Event playerTookDamage
     @Team 2
     @Condition pressure_type == 2
-    
+
     wait(0.25)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
@@ -4400,7 +4447,7 @@ rule "Speed Mode: Kill Action (JPYHG)":
     @Event playerDealtFinalBlow
     @Team 1
     @Condition speed_mode_enabled == true
-    
+
     speed_kill_count += 1
     if speed_kill_count == speed_kill_target:
         speed_kill_count = 0
@@ -4420,7 +4467,7 @@ rule "Speed Mode: Timer Action (JPYHG)":
     else:
         speed_multi = speed_base
     speed_mode_timer_reset()
-    
+
 
 rule "Speed Mode: Hack Lucio (JPYHG)":
     @Event eachPlayer
@@ -4444,7 +4491,7 @@ rule "Speed Mode: Clear Hack Lucio (JPYHG)":
 
 def speed_mode_timer_reset():
     @Name "SUB: speed_mode_timer_reset (JPYHG)"
-    
+
     #smallMessage(hostPlayer, "test3")
     if speed_player == true:
         eventPlayer.custom_speed = speed_multi
@@ -4462,7 +4509,8 @@ rule "Player Ability Usage Tracker - Primary":
     @Condition bots_react == true
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == true
     @Condition eventPlayer.player_ability_lock == 0
-    
+
+
     eventPlayer.player_ability_lock = 1
     eventPlayer.player_react_time   = eventPlayer.react_matrix[0] * bot_reactivity
     eventPlayer.player_used_eat_cd   = eventPlayer.eat_cd_matrix[0] * bot_reactivity
@@ -4478,7 +4526,7 @@ rule "Player Ability Usage Tracker - Primary":
     eventPlayer.player_used_stun_cd  = 0
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
 rule "Player Ability Usage Tracker - Secondary":
     @Event eachPlayer
@@ -4503,7 +4551,7 @@ rule "Player Ability Usage Tracker - Secondary":
     eventPlayer.player_used_stun_cd  = 0
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
 rule "Player Ability Usage Tracker - Ability 1":
     @Event eachPlayer
@@ -4528,7 +4576,7 @@ rule "Player Ability Usage Tracker - Ability 1":
     eventPlayer.player_used_stun_cd  = 0
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
 
 rule "Player Ability Usage Tracker - Ability 2":
@@ -4554,9 +4602,9 @@ rule "Player Ability Usage Tracker - Ability 2":
     eventPlayer.player_used_stun_cd  = 0
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
-    
+
 rule "Player Ability Usage Tracker - Ultimate":
     @Event eachPlayer
     @Team 1
@@ -4580,7 +4628,7 @@ rule "Player Ability Usage Tracker - Ultimate":
     eventPlayer.player_used_stun_cd = 0
 
     if RULE_CONDITION:
-        goto RULE_START 
+        goto RULE_START
 
 
 # Bot Abilities
@@ -4633,7 +4681,7 @@ rule "Bot Abilities: Dva Secondary (BB1 + Re)":
     @Condition eventPlayer.getMaxHealth() != 150
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.look_target.player_used_eat_cd > 0
-    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance
 
     wait(random.uniform(0,0.5), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[1] = true
@@ -4647,7 +4695,7 @@ rule "Bot Abilities: Dva Secondary (BB1 + Re)":
     eventPlayer.bot_ability_lock[1] = false
     if RULE_CONDITION:
         goto RULE_START
-    
+
 
 rule "Bot Abilities: Dva Ability 1 (Rd)":
     @Event eachPlayer
@@ -4685,7 +4733,7 @@ rule "Bot Abilities: Dva Ability 1 (H + P)":
     @Condition eventPlayer.getMaxHealth() != 150
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd == 0
-        
+
     if eventPlayer.getNormalizedHealth() > 0.5:
         wait(random.uniform(1,5 / ability_freq), Wait.ABORT_WHEN_FALSE)
         eventPlayer.bot_ability_lock[2] = true
@@ -4740,7 +4788,7 @@ rule "Bot Abilities: Baby Dva Ultimate (All)":
         eventPlayer.bot_ability_lock[4] = true
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         eventPlayer.bot_ability_lock[4] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -4774,7 +4822,7 @@ rule "Bot Abilities: Dva Ultimate for Remech (BB2 + P + H)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getMaxHealth() != 150
     @Condition eventPlayer.getNormalizedHealth() < 0.25
-    
+
     if random.randint(0,9) / ult_freq < 3:
         dva_ult()
 
@@ -4834,7 +4882,7 @@ rule "Bot Abilities: Doomfist Secondary (P)":
     eventPlayer.proj_type = 1
     wait(4 / ability_freq)
     eventPlayer.bot_ability_lock[1] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -4849,7 +4897,7 @@ rule "Bot Abilities: Doomfist Secondary (Rs + P)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.look_target.player_used_stun_cd > 0
-    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 15
 
     eventPlayer.ability_acc = 2
@@ -4926,7 +4974,7 @@ rule "Bot Abilities: Doomfist Ability 2 (BB1)":
     @Condition bot_behavior[1] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
 
     wait(random.uniform(5,10) / ability_freq)
     eventPlayer.bot_ability_lock[3] = true
@@ -5055,16 +5103,16 @@ rule "Bot Abilities: Junker Queen Ability 1 Random (BB1)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() != 1
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(0, 20) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(19 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
-        
+
 rule "Bot Abilities: Junker Queen Ability 1 (R + BB1)":
     @Event eachPlayer
     @Team 2
@@ -5076,7 +5124,7 @@ rule "Bot Abilities: Junker Queen Ability 1 (R + BB1)":
     @Condition eventPlayer.getNormalizedHealth() <= 0.25
     @Condition eventPlayer.bot_ability_lock[2] == false
 
-    
+
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(19 / ability_freq)
@@ -5127,7 +5175,7 @@ rule "Bot Abilities: Junker Queen Ability 2 (P)":
     wait(3)
     eventPlayer.mvmt_type = default_mvmt_type
     eventPlayer.mvmt_type_lock = false
-    
+
     wait(5 / ability_freq)
     if RULE_CONDITION:
         goto RULE_START
@@ -5226,7 +5274,7 @@ rule "Bot Abilities: Orisa Secondary (P + Rs)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.look_target.player_used_stun_cd > 0
-    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance
 
 
     eventPlayer.proj_type = 2
@@ -5246,18 +5294,18 @@ rule "Bot Abilities: Orisa Ability 1 (BB1)":
     @Event eachPlayer
     @Team 2
     @Hero orisa
-    
+
     @Condition bots_use_abilities == true
     @Condition bot_behavior[3] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(10, 20) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(12 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5272,7 +5320,7 @@ rule "Bot Abilities: Orisa Ability 1 (BB1 + R)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     eventPlayer.general_randomizer = random.randint(0,1)
     if eventPlayer.general_randomizer == 0:
         eventPlayer.bot_ability_lock[2] = true
@@ -5294,7 +5342,7 @@ rule "Bot Abilities: Orisa Ability 1 (BB1 + Rb)":
     @Condition eventPlayer.look_target.player_used_block_cd > 0
     @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
 
-    
+
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.bot_ability_signal[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -5303,7 +5351,7 @@ rule "Bot Abilities: Orisa Ability 1 (BB1 + Rb)":
     eventPlayer.bot_ability_lock[2] = false
     # Randomize Time Until Retriggerable
     wait(random.uniform(1,5) / ability_freq)
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5318,14 +5366,14 @@ rule "Bot Abilities: Orisa Ability 2 (BB1 + Re)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_eat_cd > 0
-    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance
 
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(7 / ability_freq)
     wait(random.uniform(1,5) / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5372,7 +5420,7 @@ rule "Bot Abilities: Orisa Ultimate (BB2)":
         eventPlayer.forceButtonPress(Button.PRIMARY_FIRE)
         wait(10 / ult_freq)
         eventPlayer.bot_ability_lock[4] = false
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5571,7 +5619,7 @@ rule "Bot Abilities: Ramattra Ultimate (BB3)":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 rule "Bot Abilities: Ramattra Ultimate (BB3 + R)":
     @Event eachPlayer
     @Team 2
@@ -5600,7 +5648,7 @@ rule "Bot Abilities: Reinhardt Primary + Ability 2 (Pn)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.apply_pressure == false
-    
+
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
     wait(random.uniform(3, 6))
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -5617,7 +5665,7 @@ rule "Bot Abilities: Reinhardt Primary (P)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 7
-    
+
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
     wait(random.uniform(2,5))
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
@@ -5634,7 +5682,7 @@ rule "Bot Abilities: Reinhardt Secondary (BB1 + Rb)":
     @Condition bot_behavior[5] >= 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.look_target.player_used_block_cd > 0
-    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
 
     if eventPlayer.isUsingAbility1():
         eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -5658,7 +5706,7 @@ rule "Bot Abilities: Reinhardt Ability 1 (BB1)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() != 1
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -5681,8 +5729,8 @@ rule "Bot Abilities: Reinhardt Ability 1 (BB1 + P)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) > 7 
-    
+    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) > 7
+
     wait(random.uniform(0, 5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.mvmt_type_lock = true
@@ -5713,7 +5761,7 @@ rule "Bot Abilities: Reinhardt Ability 2 (P)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(random.uniform(0, 3) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.ability_acc = 2
     eventPlayer.proj_type = 4
@@ -5748,7 +5796,7 @@ rule "Bot Abilities: Reinhardt Ultimate (BB1)":
         eventPlayer.forceButtonPress(Button.ULTIMATE)
         eventPlayer.bot_ability_lock[4] = false
         wait(10 / ult_freq)
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5775,7 +5823,7 @@ rule "Bot Abilities: Reinhardt Ultimate (BB1 + R)":
         if eventPlayer.apply_pressure == true:
             set_proj_facing()
         wait(10 / ult_freq)
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5827,7 +5875,7 @@ rule "Bot Abilities: Roadhog Ability 1 (P + R)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 20
-    
+
 
     wait(random.uniform(0, 5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.proj_type = 4
@@ -5852,7 +5900,7 @@ rule "Bot Abilities: Roadhog Ability 2 (R)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 50
-    
+
     wait(random.uniform(1, 5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(8 / ability_freq)
@@ -5885,7 +5933,7 @@ rule "Bot Abilities: Roadhog Ultimate (BB2 + P)":
         eventPlayer.bot_ability_lock[1] = false
         wait(10 / ult_freq)
         eventPlayer.bot_ability_lock[4] = false
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -5918,8 +5966,8 @@ rule "Bot Abilities: Sigma Secondary (BB1 + Rb)":
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.look_target.player_used_block_cd > 0
     @Condition (eventPlayer.look_target.player_used_eat_cd == 0 or eventPlayer.bot_ability_signal[2] == true)
-    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance 
-    
+    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
+
     eventPlayer.bot_ability_lock[1] = true
     #smallMessage(hostPlayer, "Debug: Sig Shield")
     eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
@@ -5949,12 +5997,12 @@ rule "Bot Abilities: Sigma Ability 1 (BB1 + Re)":
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_eat_cd > 0
-    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance 
-    
+    @Condition eventPlayer.look_target.player_used_eat_cd >= eventPlayer.look_target.ability_react_chance
+
     wait(random.uniform(0,0.5))
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(2)
-    eventPlayer.bot_ability_signal[2] = true 
+    eventPlayer.bot_ability_signal[2] = true
     wait(12 / ability_freq)
     eventPlayer.bot_ability_signal[2] = false
     wait(random.uniform(1,5) / ability_freq)
@@ -5972,15 +6020,15 @@ rule "Bot Abilities: Sigma Ability 2 (Rs + P)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_stun_cd > 0
-    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 20
-    
+
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.proj_type = 4
     set_proj_facing()
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     eventPlayer.proj_type = 1
-    set_proj_facing()    
+    set_proj_facing()
     wait(10 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
     if RULE_CONDITION:
@@ -5996,19 +6044,19 @@ rule "Bot Abilities: Sigma Ability 2 Random (P)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 20
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.proj_type = 4
     set_proj_facing()
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     eventPlayer.proj_type = 1
-    set_proj_facing()    
+    set_proj_facing()
     wait(10 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
     if RULE_CONDITION:
         goto RULE_START
- 
+
 
 rule "Bot Abilities: Sigma Ultimate (Default)":
     @Event eachPlayer
@@ -6095,7 +6143,7 @@ rule "Bot Abilities: Winston Ability 1 Randomized (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() != 1
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(1, 5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.startFacing(vect(random.uniform(-20,20) + eventPlayer.getEyePosition().x , random.uniform(-20,20) + eventPlayer.getEyePosition().y ,random.uniform(-20,20) + eventPlayer.getEyePosition().z), default_turn_rate, Relativity.TO_WORLD, FacingReeval.NONE)
@@ -6119,7 +6167,7 @@ rule "Bot Abilities: Winston Ability 1 (P)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) >= 9
-    
+
     wait(random.uniform(0, 2.5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -6146,7 +6194,7 @@ rule "Bot Abilities: Winston Ability 2 (BB2 + R)":
     wait(12 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
     wait(random.uniform(1,5))
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6161,14 +6209,14 @@ rule "Bot Abilities: Winston Ability 2 (BB2 + Rb)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_block_cd > 0
-    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance 
+    @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
 
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(12 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
     wait(5 / ability_freq)
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6186,7 +6234,7 @@ rule "Bot Abilities: Winston Ultimate Random (BB1)":
 
     wait(10 / ult_freq)
     winston_ult()
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6253,7 +6301,7 @@ rule "Bot Abilities: Wrecking Ball Crouch + Impluse (All)":
     @Condition bot_behavior[9] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
-    
+
     wait(random.uniform(2, 7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[1] = true
     if eventPlayer.isInAlternateForm() == false:
@@ -6280,7 +6328,7 @@ rule "Bot Abilities: Wrecking Ball Ability 1 Randomized (All)":
     @Condition bots_use_abilities == false
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -6292,7 +6340,7 @@ rule "Bot Abilities: Wrecking Ball Ability 1 Randomized (All)":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 rule "Bot Abilities: Wrecking Ball Ability 1 (Rd)":
     @Event eachPlayer
     @Team 2
@@ -6339,7 +6387,7 @@ rule "Bot Abilities: Wrecking Ball Ability 2 (BB2 + Rb)":
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(12 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6376,7 +6424,7 @@ rule "Bot Abilities: Wrecking Ball Ultimate + Crouch (BB3)":
         else:
             eventPlayer.forceButtonPress(Button.ULTIMATE)
             wait(10 / ult_freq)
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6478,7 +6526,7 @@ rule "Bot Abilities: Zarya Ability 1 (BB1 + Rb)":
     eventPlayer.bot_ability_lock[2] -= 1
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(random.uniform(2.1,5))
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -6528,11 +6576,11 @@ rule "Bot Abilities: Zarya Ultimate (BB2)":
             eventPlayer.proj_type = 2
         wait(10 / ult_freq)
         eventPlayer.bot_ability_lock[4] = false
-        
+
     if RULE_CONDITION:
         goto RULE_START
-        
-        
+
+
 ## DPS Bot Abilities
 ### Ashe Bot Abilities
 
@@ -6550,7 +6598,7 @@ rule "Bot Abilities: Ashe Primary + Secondary":
     if bot_behavior[11] == 0 or eventPlayer.look_target.getNormalizedHealth() < 0.4:
         eventPlayer.general_randomizer = eventPlayer.getAmmo(0)
         ashe_spam()
-    elif distance(eventPlayer.getEyePosition(), getClosestPlayer(eventPlayer.getEyePosition(), Team.1)) < 22 and eventPlayer.general_randomizer < 6: 
+    elif distance(eventPlayer.getEyePosition(), getClosestPlayer(eventPlayer.getEyePosition(), Team.1)) < 22 and eventPlayer.general_randomizer < 6:
         eventPlayer.general_randomizer = random.randint(1,2)
         ashe_scoped()
         eventPlayer.general_randomizer = random.randint(2,4)
@@ -6566,7 +6614,7 @@ rule "Bot Abilities: Ashe Primary + Secondary":
         eventPlayer.general_randomizer -= 1
 
     eventPlayer.bot_ability_lock[0] = false
-    eventPlayer.bot_ability_lock[1] = true      
+    eventPlayer.bot_ability_lock[1] = true
 
     if RULE_CONDITION:
         goto RULE_START
@@ -6581,7 +6629,7 @@ rule "Bot Abilities: Ashe Reload and Abilities Handler":
     @Condition eventPlayer.bot_ability_lock[1] == true
     @Condition eventPlayer.bot_ability_signal[2] == false
 
-    
+
     if eventPlayer.getAmmo(0) < eventPlayer.getMaxAmmo(0)/random.randint(3,5):
         eventPlayer.forceButtonPress(Button.RELOAD)
         waitUntil(eventPlayer.getAmmo(0) == eventPlayer.getMaxAmmo(0), random.uniform(1,3))
@@ -6589,13 +6637,13 @@ rule "Bot Abilities: Ashe Reload and Abilities Handler":
     if bot_behavior[11] >= 3 and eventPlayer.bot_ability_lock[3] == false:
         eventPlayer.bot_ability_signal[3] = true
         waitUntil(eventPlayer.bot_ability_signal[3] == false, 9999)
-    
+
     if bot_behavior[11] >= 4 and eventPlayer.bot_ability_lock[4] == false:
         eventPlayer.bot_ability_signal[4] = true
         waitUntil(eventPlayer.bot_ability_signal[4] == false, 9999)
 
     wait(0.25)
-    eventPlayer.bot_ability_lock[1] = false  
+    eventPlayer.bot_ability_lock[1] = false
 
     if RULE_CONDITION:
         goto RULE_START
@@ -6680,11 +6728,11 @@ rule "Bot Abilities: Ashe Ultimate (BB2)":
     eventPlayer.bot_ability_signal[4] = false
     wait(15 / ult_freq)
     eventPlayer.bot_ability_lock[4] = false
-        
+
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 def ashe_scoped():
     @Name "ashe_scoped"
 
@@ -6707,7 +6755,7 @@ def ashe_spam():
         wait(0.33)
         eventPlayer.general_randomizer -= 1
 
-        
+
 ### Bastion Bot Abilities
 rule "Bot Abilities: Bastion Primary":
     @Event eachPlayer
@@ -6754,7 +6802,7 @@ rule "Bot Abilities: Bastion Ability 1":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[12] >= 1
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(random.uniform(0, 7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(10 / ability_freq)
@@ -6793,7 +6841,7 @@ rule "Bot Abilities: Bastion Ultimate":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[12] >= 3
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -6817,7 +6865,7 @@ rule "Bot Abilities: Bastion Ultimate":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 ### Cassidy Bot Abilities
 rule "Bot Abilities: Cassidy Primary":
     @Event eachPlayer
@@ -6842,7 +6890,7 @@ rule "Bot Abilities: Cassidy Ability 1 (All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Cass A1 A")
     eventPlayer.bot_ability_lock[2] = true
@@ -6862,7 +6910,7 @@ rule "Bot Abilities: Cassidy Ability 1 (R)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.getAmmo(0) == 1
-    
+
     eventPlayer.general_randomizer = random.randint(0,3)
     if eventPlayer.general_randomizer == 0:
         #smallMessage(hostPlayer, "Debug: Cass A1 R")
@@ -6882,8 +6930,8 @@ rule "Bot Abilities: Cassidy Ability 1 (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
-    
+
+
     #smallMessage(hostPlayer, "Debug: Cass A1 Rd")
     eventPlayer.bot_ability_lock[2] = true
     wait(random.uniform(0.5,eventPlayer.look_target.player_react_time))
@@ -6904,7 +6952,7 @@ rule "Bot Abilities: Cassidy Ability 2 (BB1 + R)":
     @Condition bot_behavior[13] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), getClosestPlayer(eventPlayer.getEyePosition(), Team.1)) < 13
-    
+
     wait(random.uniform(0, 2), Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(10 / ability_freq)
@@ -6920,7 +6968,7 @@ rule "Bot Abilities: Cassidy Ultimate (BB2)":
     @Condition bot_behavior[13] >= 2
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -6959,10 +7007,10 @@ rule "Bot Abilities: Echo Secondary (P)":
     @Team 2
     @Hero echo
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[14] >= 1 
+    @Condition bot_behavior[14] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
-    
+
 
     eventPlayer.ability_acc = 2
     eventPlayer.proj_type = 2
@@ -6982,7 +7030,7 @@ rule "Bot Abilities: Echo Ability 1 (All)":
     @Condition eventPlayer.getAltitude() < 3
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(3,5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Echo a1 All")
     eventPlayer.bot_ability_lock[2] = true
@@ -7001,7 +7049,7 @@ rule "Bot Abilities: Echo Ability 1 (All)":
                 eventPlayer.startForcingButton(Button.CROUCH)
                 wait(random.randint(0,0.5))
                 eventPlayer.stopForcingButton(Button.CROUCH)
-            elif eventPlayer.general_randomizer >= 2: 
+            elif eventPlayer.general_randomizer >= 2:
                 eventPlayer.startForcingButton(Button.JUMP)
                 wait(random.randint(0,0.5))
                 eventPlayer.stopForcingButton(Button.JUMP)
@@ -7023,7 +7071,7 @@ rule "Bot Abilities: Echo Ability 1 (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     #smallMessage(hostPlayer, "Debug: Echo a1 Rd")
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.general_randomizer = random.randint(0,9)
@@ -7048,7 +7096,7 @@ rule "Bot Abilities: Echo Hover Stop (All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    
+
     eventPlayer.stopForcingButton(Button.JUMP)
 
 
@@ -7063,7 +7111,7 @@ rule "Bot Abilities: Echo Ability 2 (P + R)":
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 16
     @Condition eventPlayer.look_target.getNormalizedHealth() <= 0.6
-                                
+
     set_default_facing()
     eventPlayer.startForcingButton(Button.ABILITY_2)
     wait(2)
@@ -7120,7 +7168,7 @@ rule "Bot Abilities: Genji Jump (All)":
     @Condition default_jump_enabled == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    
+
     wait(random.uniform(0.4, 0.9), Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.JUMP)
     wait(random.uniform(0.2, 0.5))
@@ -7153,7 +7201,7 @@ rule "Bot Abilities: Genji Ability 1 Randomized (All)":
         eventPlayer.proj_type = 1
         set_proj_facing()
     else:
-        set_default_facing()    
+        set_default_facing()
     wait(8 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
     if RULE_CONDITION:
@@ -7172,7 +7220,7 @@ rule "Bot Abilities: Genji Ability 1 (Rd)":
     @Condition eventPlayer.isUsingAbility2() == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     eventPlayer.bot_ability_lock[2] = true
     #smallMessage(hostPlayer, "Debug: genji a1 Rd")
     eventPlayer.general_randomizer = random.randint(0, 9)
@@ -7188,7 +7236,7 @@ rule "Bot Abilities: Genji Ability 1 (Rd)":
         eventPlayer.proj_type = 1
         set_proj_facing()
     else:
-        set_default_facing()    
+        set_default_facing()
     wait(8 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
     if RULE_CONDITION:
@@ -7207,7 +7255,7 @@ rule "Bot Abilities: Genji Ability 1 (R + P)":
     @Condition eventPlayer.isUsingUltimate() == false
     @Condition eventPlayer.isUsingAbility2() == false
     @Condition eventPlayer.look_target.getNormalizedHealth() <= 0.4
-    
+
     eventPlayer.bot_ability_lock[2] = true
     #smallMessage(hostPlayer, "Debug: genji a1 R")
     eventPlayer.proj_type = 3
@@ -7230,7 +7278,7 @@ rule "Bot Abilities: Genji Ability 2 (All)":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[15] >= 1
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(random.uniform(5, 10), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     wait(0.1)
@@ -7253,7 +7301,7 @@ rule "Bot Abilities: Genji Ability 2 (Rb)":
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_block_cd > 0
     @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0,0.5))
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -7344,11 +7392,11 @@ rule "Bot Abilities: Hanzo Ultimate (BB2)":
     @Event eachPlayer
     @Team 2
     @Hero hanzo
-    
+
     @Condition bot_behavior[16] >= 4
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -7376,7 +7424,7 @@ rule "Bot Abilities: Hanzo Jump (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
-    
+
     wait(random.uniform(4,7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Hanzo jump All")
     eventPlayer.bot_ability_lock[1] = true
@@ -7412,7 +7460,7 @@ rule "Bot Abilities: Hanzo Jump (Rd)":
     eventPlayer.forceButtonPress(Button.JUMP)
     wait(4 / ability_freq)
     eventPlayer.bot_ability_lock[1] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -7425,7 +7473,7 @@ rule "Bot Abilities: Hanzo Draw (Pn)":
     @Condition bot_behavior[16] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.apply_pressure == false
-    
+
     wait(random.uniform(0.5, 3), Wait.ABORT_WHEN_FALSE)
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
     wait(random.uniform(0.75,2))
@@ -7535,7 +7583,7 @@ rule "Bot Abilities: Junkrat Ability 2 (BB1)":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 
 rule "Bot Abilities: Junkrat Ultimate":
     @Event eachPlayer
@@ -7544,7 +7592,7 @@ rule "Bot Abilities: Junkrat Ultimate":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[17] >= 2
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -7617,7 +7665,7 @@ rule "Bot Abilities: Mei Ability 1 (R)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
-    
+
     wait(random.uniform(0, 5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
@@ -7667,7 +7715,7 @@ rule "Bot Abilities: Mei Ultimate (All)":
     @Condition bot_behavior[18] >= 3
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[4] == false
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -7707,8 +7755,8 @@ rule "Bot Abilities: Pharah Ability 1 (All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.getAltitude() < 5.5
     @Condition eventPlayer.isAlive() == true
-    
-    
+
+
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(3 / ability_freq)
     if RULE_CONDITION:
@@ -7723,7 +7771,7 @@ rule "Bot Abilities: Pharah Ability 2 (BB1)":
     @Condition bot_behavior[19] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
     #smallMessage(hostPlayer, "Debug: Pharah a2 all")
     wait(random.uniform(3,7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
@@ -7755,7 +7803,7 @@ rule "Bot Abilities: Pharah Ability 2 (BB1 + Rd)":
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     #smallMessage(hostPlayer, "Debug: Pharah a2 Rd")
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.proj_type = 4
@@ -7782,7 +7830,7 @@ rule "Bot Abilities: Pharah Ultimate (P)":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[19] >= 2
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -7809,7 +7857,7 @@ rule "Bot Abilities: Pharah Hover Falling (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == false
     @Condition eventPlayer.getVerticalSpeed() < -5.7
-    
+
     eventPlayer.startForcingButton(Button.JUMP)
 
 
@@ -7821,7 +7869,7 @@ rule "Bot Abilities: Pharah Hover Too much hover (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == false
     @Condition eventPlayer.getVerticalSpeed() > 3.5
-    
+
     eventPlayer.stopForcingButton(Button.JUMP)
 
 
@@ -7851,7 +7899,7 @@ rule "Bot Abilities: Reaper Ability 1 (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.getNormalizedHealth() != 0
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
@@ -7875,7 +7923,7 @@ rule "Bot Abilities: Reaper Ability 1 (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0.5, eventPlayer.look_target.player_react_time), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
@@ -7923,7 +7971,7 @@ rule "Bot Abilities: Reaper Ultimate (All)":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[20] >= 2
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -7983,7 +8031,7 @@ rule "Bot Abilities: Sojourn Ability 1 (All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -8007,7 +8055,7 @@ rule "Bot Abilities: Sojourn Ability 1 (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0.5, eventPlayer.look_target.player_react_time))
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -8047,7 +8095,7 @@ rule "Bot Abilities: Sojourn Ultimate (All)":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[21] >= 2
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -8081,7 +8129,7 @@ rule "Bot Abilities: Soldier Secondary (P)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
-   
+
 
     wait(random.uniform(2,5),Wait.ABORT_WHEN_FALSE)
     set_feet_facing()
@@ -8092,7 +8140,7 @@ rule "Bot Abilities: Soldier Secondary (P)":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 rule "Bot Abilities: Soldier Ability 1 (R)":
     @Event eachPlayer
     @Team 2
@@ -8181,7 +8229,7 @@ rule "Bot Abilities: Soldier Ultimate (All)":
     @Condition bots_use_abilities == true
     @Condition bot_behavior[22] >= 3
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(10 / ult_freq)
     eventPlayer.general_randomizer = random.randint(0,9) / ult_freq
     if eventPlayer.general_randomizer < 3:
@@ -8390,7 +8438,7 @@ rule "Bot Abilities: Torbjorn Ability 2 (Rd)":
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0.5,2) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -8471,7 +8519,7 @@ rule "Bot Abilities: Tracer Ability 1 (Random All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] > 0
-    
+
     wait(random.uniform(2,5) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: tracer a1 rand")
     eventPlayer.bot_ability_lock[2] -= 1
@@ -8492,7 +8540,7 @@ rule "Bot Abilities: Tracer Ability 1 (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0, eventPlayer.look_target.player_react_time), Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: tracer a1 rd")
     eventPlayer.bot_ability_lock[2] -= 1
@@ -8513,7 +8561,7 @@ rule "Bot Abilities: Tracer Ability 1 Blink Melee (R)":
     @Condition eventPlayer.bot_ability_lock[2] > 0
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) <= 9
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) >= 6
-    
+
     wait(random.uniform(0.25,1) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: tracer a1 bm1")
     eventPlayer.bot_ability_lock[2] -= 1
@@ -8546,7 +8594,7 @@ rule "Bot Abilities: Tracer Ability 2 (R)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
-    
+
     wait(random.uniform(0.25, 2) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: tracer a2 rand")
     eventPlayer.bot_ability_lock[3] = true
@@ -8643,6 +8691,88 @@ rule "Tracer: Recall Tracker Display":
     wait(1)
     destroyEffect(eventPlayer.recall_effect)
 
+### Venture Bot Abilities
+rule "Bot Abilities: Venture Primary In-Range (P)":
+    @Event eachPlayer
+    @Team 2
+    @Hero venture
+    @Condition eventPlayer.apply_pressure == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 16
+    @Condition eventPlayer.bot_ability_lock[0] == false
+
+    eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+    waitUntil(distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) > 16, 9999)
+    eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+    wait(9999, Wait.ABORT_WHEN_FALSE)
+    if RULE_CONDITION:
+        goto RULE_START
+
+
+rule "Bot Abilities: Venture Secondary (P)":
+    @Event eachPlayer
+    @Team 2
+    @Hero venture
+    @Condition bot_behavior[27] >= 1
+    @Condition eventPlayer.apply_pressure == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition())  >= 10
+
+    eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
+    wait(8.5, Wait.ABORT_WHEN_FALSE)
+
+    if RULE_CONDITION:
+        goto RULE_START
+
+
+rule "Bot Abilities: Venture Secondary (NP)":
+    @Event eachPlayer
+    @Team 2
+    @Hero venture
+    @Condition bot_behavior[27] >= 1
+    @Condition eventPlayer.apply_pressure == false
+    @Condition eventPlayer.isAlive() == true
+
+    wait(random.uniform(5, 10), Wait.ABORT_WHEN_FALSE)
+    eventPlayer.startFacing(normalize(vect(random.uniform(-1,1), random.uniform(-0.25,1), random.uniform(-1,1))), 9999, Relativity.TO_PLAYER, FacingReeval.NONE)
+    wait(0.1)
+    eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
+    wait(0.5)
+    set_default_facing()
+    wait(8, Wait.ABORT_WHEN_FALSE)
+    if RULE_CONDITION:
+        goto RULE_START
+
+
+rule "Bot Abilities: Venture Ability 1":
+    @Event eachPlayer
+    @Team 2
+    @Hero venture
+    @Condition bot_behavior[27] >= 2
+    @Condition eventPlayer.isAlive() == true
+
+    wait(random.uniform(5, 15), Wait.ABORT_WHEN_FALSE)
+    eventPlayer.bot_ability_lock[0] = true
+    eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+    wait(0.1)
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+
+    wait(0.7, Wait.ABORT_WHEN_FALSE)
+
+    if random.randint(0,2) != 0:
+        eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+        wait(0.65, Wait.ABORT_WHEN_FALSE)
+        eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+    else:
+        eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+        wait(random.uniform(0.2, 1.3), Wait.ABORT_WHEN_FALSE)
+        eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+    eventPlayer.bot_ability_lock[0] = false
+
+    wait(8, Wait.ABORT_WHEN_FALSE)
+    if RULE_CONDITION:
+        goto RULE_START
+
 
 ### Widowmaker Bot Abilities
 rule "Bot Abilities: Widowmaker Primary Close (P)":
@@ -8665,7 +8795,7 @@ rule "Bot Abilities: Widowmaker Primary + Secondary Far (P)":
     @Event eachPlayer
     @Team 2
     @Hero widowmaker
-    @Condition bot_behavior[27] >= 1
+    @Condition bot_behavior[28] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition())  >= 7.5
@@ -8685,10 +8815,10 @@ rule "Bot Abilities: Widowmaker Scope (Np)":
     @Event eachPlayer
     @Team 2
     @Hero widowmaker
-    @Condition bot_behavior[27] >= 1
+    @Condition bot_behavior[28] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.apply_pressure == false
-    
+
     wait(random.uniform(0, 2), Wait.ABORT_WHEN_FALSE)
     eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
     wait(0.9)
@@ -8702,7 +8832,7 @@ rule "Bot Abilities Widowmaker Ability 1 Simulation (All)":
     @Team 2
     @Hero widowmaker
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[27] >= 2
+    @Condition bot_behavior[28] >= 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
 
@@ -8714,21 +8844,21 @@ rule "Bot Abilities Widowmaker Ability 1 Simulation (All)":
         eventPlayer.applyImpulse(Vector.UP, random.uniform(10,20), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
     elif eventPlayer.general_randomizer == 1:
         eventPlayer.applyImpulse(Vector.UP * random.uniform(0,1) + Vector.LEFT * random.uniform(0,1), random.uniform(10,20), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
-    else: 
+    else:
         eventPlayer.applyImpulse(Vector.UP * random.uniform(0,1) + Vector.RIGHT * random.uniform(0,1), random.uniform(10,20), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
     wait(12 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
 
-    
+
 rule "Bot Abilities: Widowmaker Ability 2 (R)":
     @Event eachPlayer
     @Team 2
     @Hero widowmaker
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[27] >= 3
+    @Condition bot_behavior[28] >= 3
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
     wait(random.uniform(3, 7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: widow a2 rand")
     eventPlayer.bot_ability_lock[3] = true
@@ -8767,7 +8897,7 @@ rule "Bot Abilities: Ana Primary + Secondary Far (P)":
     @Event eachPlayer
     @Team 2
     @Hero ana
-    @Condition bot_behavior[28] >= 1
+    @Condition bot_behavior[29] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_signal[2] == false
@@ -8799,11 +8929,11 @@ rule "Bot Abilities: Ana Secondary (Pn)":
     @Event eachPlayer
     @Team 2
     @Hero ana
-    @Condition bot_behavior[28] >= 1
+    @Condition bot_behavior[29] >= 1
     @Condition bots_use_abilities == true
     @Condition eventPlayer.apply_pressure == false
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(random.uniform(0, 2), Wait.ABORT_WHEN_FALSE)
     eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
     wait(0.9)
@@ -8818,16 +8948,16 @@ rule "Bot Abilities: Ana Ability 1 (P)":
     @Team 2
     @Hero ana
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[28] >= 2
+    @Condition bot_behavior[29] >= 2
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
-    
+
     wait(random.uniform(5,10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Ana a1 rand")
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.bot_ability_signal[2] = true
-    eventPlayer.ability_acc = 2 
+    eventPlayer.ability_acc = 2
     eventPlayer.proj_type = 3
     set_proj_facing()
     wait(0.5)
@@ -8846,18 +8976,18 @@ rule "Bot Abilities: Ana Ability 1 (P + Rs)":
     @Team 2
     @Hero ana
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[28] >= 2
+    @Condition bot_behavior[29] >= 2
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_stun_cd > 0
-    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance 
-    
+    @Condition eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance
+
     wait(random.uniform(0.5, eventPlayer.look_target.player_react_time))
     #smallMessage(hostPlayer, "Debug: Ana a1 rs")
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.bot_ability_signal[2] = true
-    eventPlayer.ability_acc = 2 
+    eventPlayer.ability_acc = 2
     eventPlayer.proj_type = 3
     set_proj_facing()
     wait(0.5)
@@ -8876,7 +9006,7 @@ rule "Bot Abilities: Ana Ability 2 Damage (P)":
     @Team 2
     @Hero ana
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[28] >= 3
+    @Condition bot_behavior[29] >= 3
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
@@ -8884,7 +9014,7 @@ rule "Bot Abilities: Ana Ability 2 Damage (P)":
     wait(random.uniform(3,7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.bot_ability_signal[3] = true
-    eventPlayer.ability_acc = 2 
+    eventPlayer.ability_acc = 2
     eventPlayer.proj_type = 4
     set_proj_facing()
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -8902,7 +9032,7 @@ rule "Bot Abilities: Ana Ability 2 Heal (R)":
     @Hero ana
     @Condition bots_use_abilities == true
     @Condition bots_react == true
-    @Condition bot_behavior[28] >= 4
+    @Condition bot_behavior[29] >= 4
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.50
@@ -8910,7 +9040,7 @@ rule "Bot Abilities: Ana Ability 2 Heal (R)":
     wait(random.uniform(0.25,1))
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.bot_ability_signal[3] = true
-    eventPlayer.ability_acc = 2 
+    eventPlayer.ability_acc = 2
     set_ground_facing()
     wait(0.1)
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -8950,7 +9080,7 @@ rule "Bot Abilities: Baptiste Ability 1 (BB1 + H)":
     @Team 2
     @Hero baptiste
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[29] >= 1
+    @Condition bot_behavior[30] >= 1
     @Condition eventPlayer.bot_ability_lock[3] == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
 
@@ -8968,7 +9098,7 @@ rule "Bot Abilities: Baptiste Ability 2 (BB2 + H)":
     @Team 2
     @Hero baptiste
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[29] >= 2
+    @Condition bot_behavior[30] >= 2
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.4
 
@@ -8992,7 +9122,7 @@ rule "Bot Abilities: Baptiste Ultimate (BB3)":
     @Hero baptiste
     @Condition bots_use_abilities == true
     @Condition bots_react == true
-    @Condition bot_behavior[29] >= 3
+    @Condition bot_behavior[30] >= 3
     @Condition eventPlayer.apply_pressure == true
 
 
@@ -9021,7 +9151,7 @@ rule "Bot Abilities: Baptiste Jump":
     @Condition default_jump_enabled == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    
+
     wait(random.uniform(1, 3) / ability_freq, Wait.ABORT_WHEN_FALSE)
     if random.randint(0,9) < 7:
         eventPlayer.startForcingButton(Button.CROUCH)
@@ -9055,7 +9185,7 @@ rule "Bot Abilities: Brig Primary":
     @Condition eventPlayer.bot_ability_signal[1] == false
     @Condition eventPlayer.bot_ability_signal[2] == false
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 7
-    
+
     eventPlayer.ability_acc = 2
     set_default_facing()
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
@@ -9064,13 +9194,13 @@ rule "Bot Abilities: Brig Primary":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 rule "Bot Abilities: Brig Secondary (H)":
     @Event eachPlayer
     @Team 2
     @Hero brigitte
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[30] >= 1
+    @Condition bot_behavior[31] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.25
@@ -9095,12 +9225,12 @@ rule "Bot Abilities: Brig Secondary (Rb)":
     @Hero brigitte
     @Condition bots_use_abilities == true
     @Condition bots_react == true
-    @Condition bot_behavior[30] >= 1
+    @Condition bot_behavior[31] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition eventPlayer.look_target.player_used_block_cd > 0
     @Condition eventPlayer.look_target.player_used_block_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     if eventPlayer.look_target.player_used_stun_cd == 0 or eventPlayer.bot_ability_lock[1] == true:
         #smallMessage(hostPlayer, "Debug: Brig Shield Rb")
         wait(random.uniform(0.1,0.5))
@@ -9123,7 +9253,7 @@ rule "Bot Abilities: Brig Secondary Combo Random (P)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[1] == false
-    
+
     wait(random.uniform(3,7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Brig Bash P")
     eventPlayer.bot_ability_lock[1] = true
@@ -9142,7 +9272,7 @@ rule "Bot Abilities: Brig Secondary Combo Random (P)":
         goto RULE_START
 
 
-rule "Bot Abilities: Secondary Combo (Rd Rs)":
+rule "Bot Abilities: Brigittte Secondary Combo (Rd Rs)":
     @Event eachPlayer
     @Team 2
     @Hero brigitte
@@ -9152,7 +9282,7 @@ rule "Bot Abilities: Secondary Combo (Rd Rs)":
     @Condition eventPlayer.bot_ability_lock[1] == false
     @Condition (eventPlayer.look_target.player_used_dodge_cd > 0 or eventPlayer.look_target.player_used_stun_cd > 0)
     @Condition (eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance or eventPlayer.look_target.player_used_stun_cd >= eventPlayer.look_target.ability_react_chance )
-    
+
     #smallMessage(hostPlayer, "Debug: Brig Bash Rd/s")
     eventPlayer.bot_ability_var = distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition())
     if eventPlayer.look_target.player_used_stun_cd == 0 or eventPlayer.bot_ability_var > 12:
@@ -9178,7 +9308,7 @@ rule "Bot Abilities: Brigitte Ability 1 (P)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 20
 
-    
+
     wait(random.uniform(3, 7) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Brig a1 p")
     eventPlayer.bot_ability_lock[2] = true
@@ -9278,16 +9408,16 @@ rule "Bot Ablities: Illari Ability 1 Random":
     @Team 2
     @Hero illari
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[31] >= 1
+    @Condition bot_behavior[32] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
     wait(random.randint(2,10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.startForcingButton(Button.ABILITY_1)
     wait(7 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -9297,18 +9427,18 @@ rule "Bot Ablities: Illari Ability 1 Proximity (P)":
     @Team 2
     @Hero illari
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[31] >= 1
+    @Condition bot_behavior[32] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) <= 8.5
-    
+
     wait(random.randint(0.5,2), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.startForcingButton(Button.ABILITY_1)
     wait(7 / ability_freq)
     eventPlayer.bot_ability_lock[3] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -9318,7 +9448,7 @@ rule "Bot Abilities: Illari Ultimate ":
     @Team 2
     @Hero illari
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[31] >= 2
+    @Condition bot_behavior[32] >= 2
     @Condition eventPlayer.isAlive() == true
 
     wait(10 / ult_freq)
@@ -9345,7 +9475,7 @@ rule "Bot Abilities: Illari Ultimate ":
                     eventPlayer.startForcingButton(Button.CROUCH)
                     wait(random.randint(0,0.5))
                     eventPlayer.stopForcingButton(Button.CROUCH)
-                elif eventPlayer.general_randomizer == 1: 
+                elif eventPlayer.general_randomizer == 1:
                     eventPlayer.startForcingButton(Button.JUMP)
                     wait(random.randint(0,0.5))
                     eventPlayer.stopForcingButton(Button.JUMP)
@@ -9353,6 +9483,8 @@ rule "Bot Abilities: Illari Ultimate ":
 
     if RULE_CONDITION:
         goto RULE_START
+
+
 ### Kiriko Bot Abilities
 rule "Bot Abilities: Kiriko Secondary (P)":
     @Event eachPlayer
@@ -9380,7 +9512,7 @@ rule "Bot Ablities: Kiriko Ability 1 (H)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.7
 
-    
+
     #smallMessage(hostPlayer, "Debug: Kiri a1 H")
     set_healing_facing()
     wait(random.uniform(0.5,1.5))
@@ -9403,12 +9535,12 @@ rule "Bot Ablities: Kiriko Ability 2 (H)":
     @Team 2
     @Hero kiriko
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[32] >= 1
+    @Condition bot_behavior[33] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.4
     @Condition eventPlayer.is_healing_facing == false
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
     wait(random.uniform(0.25, 1), Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Kiri a2 H")
     eventPlayer.bot_ability_lock[3] = true
@@ -9432,12 +9564,12 @@ rule "Bot Ablities: Kiriko Ability 2 (Rd)":
     @Hero kiriko
     @Condition bots_use_abilities == true
     @Condition bots_react == true
-    @Condition bot_behavior[32] >= 1
+    @Condition bot_behavior[33] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
-    
+
     wait(random.uniform(0.25, 1), Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Kiri a2 Rd")
     eventPlayer.bot_ability_lock[3] = true
@@ -9452,14 +9584,14 @@ rule "Bot Ablities: Kiriko Ability 2 (Rd)":
     eventPlayer.bot_ability_lock[3] = false
     if RULE_CONDITION:
         goto RULE_START
-        
+
 
 rule "Bot Ablities: Kiriko Ultimate (BB2)":
     @Event eachPlayer
     @Team 2
     @Hero kiriko
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[32] >= 2
+    @Condition bot_behavior[33] >= 2
     @Condition eventPlayer.isAlive() == true
 
     wait(10 / ult_freq)
@@ -9479,7 +9611,7 @@ rule "Bot Abilities Lifeweaver 2nd Weapon Primary (P)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_signal[1] == false
-    
+
 
    eventPlayer.ability_acc = 2
    eventPlayer.proj_type = 2
@@ -9495,9 +9627,9 @@ rule "Bot Abilities Lifeweaver Ability 1 (BB1)":
     @Team 2
     @Hero lifeweaver
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[33] >= 1
+    @Condition bot_behavior[34] >= 1
     @Condition eventPlayer.isAlive() == true
- 
+
     wait(random.uniform(5,10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_signal[1] = true
     set_ground_facing()
@@ -9531,7 +9663,7 @@ rule "Bot Abilities Lifeweaver Jump (All)":
     eventPlayer.forceButtonPress(Button.JUMP)
     wait(5 / ability_freq)
     eventPlayer.bot_ability_lock[2] = false
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -9546,7 +9678,7 @@ rule "Bot Abilities Lifeweaver Jump (Rd)":
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance
- 
+
     wait(random.uniform(0.25,1), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     #smallMessage(hostPlayer, "Debug: LW Jump Reactive")
@@ -9565,10 +9697,10 @@ rule "Bot Abilities Lifeweaver Ability 2 (BB2)":
     @Team 2
     @Hero lifeweaver
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[33] >= 2
+    @Condition bot_behavior[34] >= 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
- 
+
     wait(random.uniform(5,10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[3] = true
     eventPlayer.bot_ability_signal[1] = true
@@ -9592,10 +9724,10 @@ rule "Bot Abilities Lifeweaver Ultimate (BB3)":
     @Team 2
     @Hero lifeweaver
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[33] >= 3
+    @Condition bot_behavior[34] >= 3
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[4] == false
- 
+
     wait(10 / ult_freq)
     if random.randint(0,9) < 3:
         #smallMessage(hostPlayer, "debug: lifeweaver ult")
@@ -9635,11 +9767,11 @@ rule "Bot Abilities: Lucio Secondary (BB2)":
     @Team 2
     @Hero lucio
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[34] >= 2
+    @Condition bot_behavior[35] >= 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() != 1
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) < 7.75
-    
+
     wait(random.uniform(0.25, 1.5), Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Lucio m2")
     eventPlayer.forceButtonPress(Button.SECONDARY_FIRE)
@@ -9667,12 +9799,12 @@ rule "Bot Abilities: Lucio Ability 2 (BB1 + Rd)":
     @Hero lucio
     @Condition bots_use_abilities == true
     @Condition bots_react == true
-    @Condition bot_behavior[34] >= 1
+    @Condition bot_behavior[35] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd >= eventPlayer.look_target.ability_react_chance * 2
-    
+
     wait(random.uniform(0.25, 1), Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Lucio a2 Rd")
     eventPlayer.bot_ability_lock[3] = true
@@ -9688,10 +9820,10 @@ rule "Bot Abilities: Lucio Ability 2 Random (BB1)":
     @Team 2
     @Hero lucio
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[34] >= 1
+    @Condition bot_behavior[35] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
-    
+
     wait(random.uniform(5, 10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     #smallMessage(hostPlayer, "Debug: Lucio a2 rand")
     eventPlayer.bot_ability_lock[3] = true
@@ -9707,7 +9839,7 @@ rule "Bot Abilities: Lucio Ability 2 Heal (BB1)":
     @Team 2
     @Hero lucio
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[34] >= 3
+    @Condition bot_behavior[35] >= 3
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
@@ -9728,7 +9860,7 @@ rule "Bot Ablities: Lucio Ultimate Random (BB4)":
     @Team 2
     @Hero lucio
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[34] >= 4
+    @Condition bot_behavior[35] >= 4
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[4] == false
 
@@ -9747,7 +9879,7 @@ rule "Bot Ablities: Lucio Ultimate AJAX Simulator (BB4 + H)":
     @Team 2
     @Hero lucio
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[34] >= 4
+    @Condition bot_behavior[35] >= 4
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.25
     @Condition eventPlayer.bot_ability_lock[4] == false
@@ -9769,7 +9901,7 @@ rule "Bot Abilities: Lucio AD Turnaround (Random Strafe)":
     @Condition bots_use_abilities == true
     @Condition default_mvmt_type == 0
     @Condition eventPlayer.isAlive() == true
-    
+
     eventPlayer.mvmt_type_lock = true
     eventPlayer.mvmt_type = alt_mvmt_array[0]
     eventPlayer.bot_mvmt_var = 0
@@ -9779,12 +9911,12 @@ rule "Bot Abilities: Lucio AD Turnaround (Random Strafe)":
             eventPlayer.proj_type = 0
         while eventPlayer.bot_mvmt_var < 15:
             if not RULE_CONDITION:
-                return   
+                return
             eventPlayer.startFacing(vect(eventPlayer.getPosition().x + 1000, eventPlayer.getPosition().x - 10, eventPlayer.getPosition().x + 1000), 1000, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
             wait(random.uniform(0.25,0.5), Wait.ABORT_WHEN_FALSE)
             eventPlayer.startFacing(vect(eventPlayer.getPosition().x - 1000, eventPlayer.getPosition().x - 10, eventPlayer.getPosition().x - 1000), 1000, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
             wait(random.uniform(0.25,0.5), Wait.ABORT_WHEN_FALSE)
-            eventPlayer.bot_mvmt_var += 1  
+            eventPlayer.bot_mvmt_var += 1
         eventPlayer.mvmt_type = default_mvmt_type
         eventPlayer.mvmt_type_lock = false
         if eventPlayer.apply_pressure == true:
@@ -9818,10 +9950,10 @@ rule "Bot Ablities: Mercy Healing (BB1)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
-    @Condition bot_behavior[35] >= 1
+    @Condition bot_behavior[36] >= 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.look_target.getNormalizedHealth() <= 0.90
-    
+
     eventPlayer.setWeapon(1)
     eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
     waitUntil(eventPlayer.look_target.getNormalizedHealth() == 1, 9999)
@@ -9866,7 +9998,7 @@ rule "Bot Ablities: Mercy Start Hover (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isUsingAbility1() == false
     @Condition eventPlayer.isOnGround() == false
-    
+
     eventPlayer.startForcingButton(Button.JUMP)
 
 
@@ -9877,7 +10009,7 @@ rule "Bot Ablities: Mercy Stop Hover (All)":
     @Condition bots_use_abilities == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isOnGround() == true
-    
+
     eventPlayer.stopForcingButton(Button.JUMP)
 
 
@@ -9886,7 +10018,7 @@ rule "Bot Ablities: Mercy Ultimate (BB2)":
     @Team 2
     @Hero mercy
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[35] >= 2
+    @Condition bot_behavior[36] >= 2
     @Condition eventPlayer.isAlive() == true
 
     wait(10 / ult_freq)
@@ -9921,7 +10053,7 @@ rule "Bot Abilities: Moira Ability 1 (All)":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[2] == false
     @Condition eventPlayer.getNormalizedHealth() <= 0.33
-    
+
     wait(random.uniform(0, 2), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -9943,7 +10075,7 @@ rule "Bot Abilities: Moira Ability 1 (Rd)":
     @Condition eventPlayer.look_target.player_used_dodge_cd > 0
     @Condition eventPlayer.look_target.player_used_dodge_cd > eventPlayer.look_target.ability_react_chance * 2
 
-    
+
     wait(random.uniform(0.25, 1), Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_lock[2] = true
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -9952,13 +10084,13 @@ rule "Bot Abilities: Moira Ability 1 (Rd)":
     if RULE_CONDITION:
         goto RULE_START
 
-        
+
 rule "Bot Abilities: Moira Ability 2 Damage (BB1 + P)":
     @Event eachPlayer
     @Team 2
     @Hero moira
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[36] >= 1
+    @Condition bot_behavior[37] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.bot_ability_lock[3] == false
@@ -9987,7 +10119,7 @@ rule "Bot Abilities: Moira Ability 2 Heal (BB2)":
     @Team 2
     @Hero moira
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[36] >= 2
+    @Condition bot_behavior[37] >= 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.getNormalizedHealth() <= 0.5
     @Condition eventPlayer.bot_ability_lock[3] == false
@@ -10013,7 +10145,7 @@ rule "Bot Abilities: Moira Ulitmate (BB3)":
     @Team 2
     @Hero moira
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[36] >= 3
+    @Condition bot_behavior[37] >= 3
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
 
@@ -10050,7 +10182,7 @@ rule "Bot Abilities: Zenyatta Secondary (All)":
     @Team 2
     @Hero zenyatta
     @Condition eventPlayer.isAlive() == true
-    
+
     wait(random.uniform(5,10) / ability_freq, Wait.ABORT_WHEN_FALSE)
     eventPlayer.bot_ability_signal[1] = true
     eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
@@ -10069,11 +10201,11 @@ rule "Bot Abilities: Zenyatta Ability 2 (BB1 + P)":
     @Team 2
     @Hero zenyatta
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[37] >= 1
+    @Condition bot_behavior[38] >= 1
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isUsingAbility2() == false
-    
+
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(2 / ability_freq)
     if RULE_CONDITION:
@@ -10089,11 +10221,11 @@ rule "Bot Abilities: Zenyatta Melee (R)":
     @Condition eventPlayer.apply_pressure == true
     @Condition eventPlayer.isAlive() == true
     @Condition distance(eventPlayer.getEyePosition(), eventPlayer.look_target.getEyePosition()) <= 2.5
-    
+
     wait(random.uniform(0.25,1), Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.MELEE)
     wait(3 / ability_freq)
-    
+
     if RULE_CONDITION:
         goto RULE_START
 
@@ -10103,7 +10235,7 @@ rule "Bot Abilities: Zenyatta Ultimate Random (BB3)":
     @Team 2
     @Hero zenyatta
     @Condition bots_use_abilities == true
-    @Condition bot_behavior[37] >= 2
+    @Condition bot_behavior[38] >= 2
     @Condition eventPlayer.isAlive() == true
 
     wait(10 / ult_freq)
