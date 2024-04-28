@@ -9343,7 +9343,7 @@ rule "Bot Abilities: Brigitte Ability 1 (P + H)":
         goto RULE_START
 
 
-rule "Bot Ablities: Brigitte Ultimate":
+rule "Bot Abilities: Brigitte Ultimate":
     @Event eachPlayer
     @Team 2
     @Hero brigitte
@@ -9387,7 +9387,7 @@ def brig_whip_shot():
 
 
 ## Illari Bot Abilities
-rule "Bot Ablities: Illari Primary (P)":
+rule "Bot Abilities: Illari Primary (P)":
     @Event eachPlayer
     @Team 2
     @Hero illari
@@ -9403,7 +9403,7 @@ rule "Bot Ablities: Illari Primary (P)":
         goto RULE_START
 
 
-rule "Bot Ablities: Illari Ability 1 Random":
+rule "Bot Abilities: Illari Ability 1 Random":
     @Event eachPlayer
     @Team 2
     @Hero illari
@@ -9422,7 +9422,7 @@ rule "Bot Ablities: Illari Ability 1 Random":
         goto RULE_START
 
 
-rule "Bot Ablities: Illari Ability 1 Proximity (P)":
+rule "Bot Abilities: Illari Ability 1 Proximity (P)":
     @Event eachPlayer
     @Team 2
     @Hero illari
@@ -9503,7 +9503,7 @@ rule "Bot Abilities: Kiriko Secondary (P)":
         goto RULE_START
 
 
-rule "Bot Ablities: Kiriko Ability 1 (H)":
+rule "Bot Abilities: Kiriko Ability 1 (H)":
     @Event eachPlayer
     @Team 2
     @Hero kiriko
@@ -9530,7 +9530,7 @@ rule "Bot Ablities: Kiriko Ability 1 (H)":
         goto RULE_START
 
 
-rule "Bot Ablities: Kiriko Ability 2 (H)":
+rule "Bot Abilities: Kiriko Ability 2 (H)":
     @Event eachPlayer
     @Team 2
     @Hero kiriko
@@ -9558,7 +9558,7 @@ rule "Bot Ablities: Kiriko Ability 2 (H)":
         goto RULE_START
 
 
-rule "Bot Ablities: Kiriko Ability 2 (Rd)":
+rule "Bot Abilities: Kiriko Ability 2 (Rd)":
     @Event eachPlayer
     @Team 2
     @Hero kiriko
@@ -9586,7 +9586,7 @@ rule "Bot Ablities: Kiriko Ability 2 (Rd)":
         goto RULE_START
 
 
-rule "Bot Ablities: Kiriko Ultimate (BB2)":
+rule "Bot Abilities: Kiriko Ultimate (BB2)":
     @Event eachPlayer
     @Team 2
     @Hero kiriko
@@ -9855,7 +9855,7 @@ rule "Bot Abilities: Lucio Ability 2 Heal (BB1)":
         goto RULE_START
 
 
-rule "Bot Ablities: Lucio Ultimate Random (BB4)":
+rule "Bot Abilities: Lucio Ultimate Random (BB4)":
     @Event eachPlayer
     @Team 2
     @Hero lucio
@@ -9874,7 +9874,7 @@ rule "Bot Ablities: Lucio Ultimate Random (BB4)":
         goto RULE_START
 
 
-rule "Bot Ablities: Lucio Ultimate AJAX Simulator (BB4 + H)":
+rule "Bot Abilities: Lucio Ultimate AJAX Simulator (BB4 + H)":
     @Event eachPlayer
     @Team 2
     @Hero lucio
@@ -9931,7 +9931,7 @@ rule "Bot Abilities: Lucio AD Turnaround (Random Strafe)":
 
 
 ### Mercy Bot Abilities
-rule "Bot Ablities: Mercy Target (All)`":
+rule "Bot Abilities: Mercy Target (All)`":
     @Event eachPlayer
     @Team 2
     @Hero mercy
@@ -9946,7 +9946,7 @@ rule "Bot Ablities: Mercy Target (All)`":
     eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
 
 
-rule "Bot Ablities: Mercy Healing (BB1)":
+rule "Bot Abilities: Mercy Healing (BB1)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
@@ -9963,7 +9963,7 @@ rule "Bot Ablities: Mercy Healing (BB1)":
         goto RULE_START
 
 
-rule "Bot Ablities: Mercy Ability 1 (All)":
+rule "Bot Abilities: Mercy Ability 1 (All)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
@@ -9990,7 +9990,7 @@ rule "Bot Ablities: Mercy Ability 1 (All)":
         goto RULE_START
 
 
-rule "Bot Ablities: Mercy Start Hover (All)":
+rule "Bot Abilities: Mercy Start Hover (All)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
@@ -10002,7 +10002,7 @@ rule "Bot Ablities: Mercy Start Hover (All)":
     eventPlayer.startForcingButton(Button.JUMP)
 
 
-rule "Bot Ablities: Mercy Stop Hover (All)":
+rule "Bot Abilities: Mercy Stop Hover (All)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
@@ -10013,7 +10013,7 @@ rule "Bot Ablities: Mercy Stop Hover (All)":
     eventPlayer.stopForcingButton(Button.JUMP)
 
 
-rule "Bot Ablities: Mercy Ultimate (BB2)":
+rule "Bot Abilities: Mercy Ultimate (BB2)":
     @Event eachPlayer
     @Team 2
     @Hero mercy
