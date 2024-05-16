@@ -100,9 +100,9 @@ globalvar pressure_type
 globalvar pressure_accuracy
 globalvar pressure_beam
 ## Speed Mode Variables
-globalvar speed_mode_enabled
+globalvar speed_mode
 globalvar speed_timer
-globalvar speed_multi
+globalvar speed_current
 globalvar speed_score
 globalvar speed_base
 globalvar speed_increment
@@ -357,7 +357,7 @@ subroutine menu_act_set_spawn_pt
 #### Submenu 5
 subroutine menu_act_cycle_pressure_mode
 subroutine menu_act_cycle_accuracy
-subroutine menu_act_toggle_speed
+subroutine menu_act_cycle_speed
 subroutine menu_act_cycle_timer
 subroutine menu_act_cycle_increment
 subroutine menu_act_cycle_decrement
@@ -691,7 +691,7 @@ rule "Initialize: Workshop Settings":
     punish_deaths = createWorkshopSetting(bool, "4.1. Bot Pressure Modifiers (killable mode only)", "Punish player deaths (player is stunned and attacker recovers health)", true, 2)
 
     # Speed Mode
-    speed_mode_enabled = createWorkshopSetting(bool, "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Increase Bots Movement Speed Every Elimination (JPYHG)", false, 0)
+    speed_mode = createWorkshopSetting(enum["off", "single timer", "multi timer"], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Increase Bots Movement Speed Every Elimination (JPYHG)", 0, 0)
     speed_player = createWorkshopSetting(bool, "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Applies to Player", false, 1)
     speed_max_time = createWorkshopSetting(float[0:300], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Mode Timer (s)", 10, 2)
     speed_base = createWorkshopSetting(int[0:1000], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Mode Base Speed (%)", 100, 3)
@@ -1304,6 +1304,9 @@ rule "Initialize: Static Global Variables Part 2":
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "Jjonak"
 
+    # Initialize speed mode variables
+    speed_score = speed_base
+
     data_loaded[0] = true
 
 
@@ -1432,14 +1435,14 @@ def stats_hud():
     "Deaths:  {0}".format(localPlayer.stat_deaths), HudPosition.LEFT, 0.11, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudSubtext([i for i in localPlayer if pressure_type != 0],
     "Net Damage:  {0}".format(localPlayer.stat_dmg_dealt - localPlayer.stat_dmg_taken), HudPosition.LEFT, 0.51, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "\nSpeed High Score:  {0}%".format(speed_score), HudPosition.RIGHT, -0.99, Color.BLACK, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
-    "Speed Multiplier:  {0}%".format(speed_multi), HudPosition.RIGHT,  -0.98, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
+    "Current Speed:  {0}%".format(speed_current), HudPosition.RIGHT,  -0.98, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "Kills:  {0} / {1}".format(speed_kill_count, speed_kill_target), HudPosition.RIGHT,  -0.97, Color.RED, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     #Speed Mode Data
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{0}".format(speed_timer), HudPosition.TOP, 666, Color.GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
@@ -1593,7 +1596,7 @@ rule "Menu Controls: Toggle On Setup":
     eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.setMoveSpeed(0)
 
-    if speed_mode_enabled == true and eventPlayer == hostPlayer:
+    if speed_mode > 0 and eventPlayer == hostPlayer:
         stopChasingVariable(speed_timer)
 
 rule "Menu Controls: Toggle Off Setup Player":
@@ -1619,7 +1622,7 @@ rule "Menu Controls: Toggle Off Setup Game":
             smallMessage(getAllPlayers(), "    Creating New Bots...")
             create_all_bots()
         eventPlayer.menu_reset_bots = false
-    if speed_mode_enabled == true and eventPlayer == hostPlayer:
+    if speed_mode > 0 and eventPlayer == hostPlayer:
         chase(speed_timer, 0, rate=1, ChaseReeval.NONE)
 
 
@@ -2444,15 +2447,12 @@ def menu_hud():
 
     new_menu_item_cycle()
 
-    ## Speed Mode Toggle
+    ## Speed Mode Cycle
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Speed Mode"
-    menu_on_opt_title[menu_opt_size] = "Speed: "
-    if speed_mode_enabled == true:
-        menu_on_opt_color[menu_opt_size] = Color.GREEN
-    else:
-        menu_on_opt_color[menu_opt_size] = Color.RED
-    new_menu_item_toggle()
+    menu_on_opt_title[menu_opt_size] = "Speed Mode: "
+    menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
+    new_menu_item_cycle()
 
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Speed Timer"
@@ -2502,18 +2502,16 @@ def menu_speed_set_text_and_color():
     elif eventPlayer.menu_opt_value == 175:
         eventPlayer.menu_opt_var[eventPlayer.menu_index] = opt_array_speed[1][5]
         menu_on_opt_color[eventPlayer.menu_index] = opt_array_speed[2][5]
-    else:
-        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0} %".format(eventPlayer.menu_opt_value)
-        menu_on_opt_color[eventPlayer.menu_index] = default_menu_on_index_color
 
 
 def menu_hero_bar_color_set():
-    @Name "menu_hero_bar_color_set"
+    @Name "SUB: menu_hero_bar_color_set"
 
     if hero_array_status[eventPlayer.menu_opt_status[eventPlayer.menu_index]] == "on":
         eventPlayer.bar_color[eventPlayer.menu_index] = Color.GREEN
     else:
         eventPlayer.bar_color[eventPlayer.menu_index] = Color.RED
+
 
 def menu_pressure_cycle_color_set():
     @Name "SUB: menu_pressure_cycle_color_set"
@@ -2667,7 +2665,8 @@ rule "Menu Actions: Input Read":
             menu_act_cycle_accuracy()
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
-            menu_act_toggle_speed()
+            menu_act_cycle_speed()
+            eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_timer()
             eventPlayer.menu_wait = 0.01
@@ -3423,12 +3422,12 @@ def menu_act_cycle_accuracy():
     menu_pressure_cycle_color_set()
 
 
-def menu_act_toggle_speed():
-    @Name "SUB: menu_act_toggle_speed"
+def menu_act_cycle_speed():
+    @Name "SUB: menu_act_cycle_speed"
 
-    menu_status_io_toggle()
-    if eventPlayer.menu_opt_value == 0:
-        speed_mode_enabled = false
+    menu_status_cycle()
+    speed_mode = eventPlayer.menu_opt_value
+    if speed_mode == 0:
         if speed_player == true:
             eventPlayer.custom_speed = 100
         getPlayers(Team.2).setMoveSpeed(custom_bot_speed)
@@ -3437,10 +3436,9 @@ def menu_act_toggle_speed():
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
         smallMessage(eventPlayer, "    Speed Mode disabled")
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Disabled"
     else:
-        speed_mode_enabled = true
-
-        speed_multi = speed_base
+        speed_current = speed_base
         speed_score = speed_base
         speed_timer = speed_max_time
         if speed_player == true:
@@ -3451,6 +3449,10 @@ def menu_act_toggle_speed():
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = false
         smallMessage(eventPlayer, "    Speed Mode enabled")
+        if speed_mode == 1:
+            eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Single Timer"
+        else:
+            eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Multi Timer"
 
 
 def menu_act_cycle_timer():
@@ -3715,8 +3717,8 @@ def create_all_bots():
     for bot_gen_index in range(0, bot_count,1):
         create_bot()
         wait(1)
-    if speed_mode_enabled == true:
-        getPlayers(Team.2).setMoveSpeed(speed_multi)
+    if speed_mode > 0:
+        getPlayers(Team.2).setMoveSpeed(speed_current)
     else:
         getPlayers(Team.2).setMoveSpeed(custom_bot_speed)
 
@@ -3884,7 +3886,7 @@ rule "Bot Pathing: Movement Handler: Movement Type 1 default Pathing Speed Off":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 1
-    @Condition speed_mode_enabled == false or speed_strafe_reduction == false
+    @Condition speed_mode == 0 or speed_strafe_reduction == false
 
     change_pathing()
     wait(random.uniform(mvmt_min_wait, mvmt_max_wait), Wait.ABORT_WHEN_FALSE)
@@ -3897,11 +3899,11 @@ rule "Bot Pathing: Movement Handler: Movement Type 1 default Pathing Speed On":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 1
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
     @Condition speed_strafe_reduction == true
 
     change_pathing()
-    wait(random.uniform(mvmt_min_wait, mvmt_max_wait)/speed_multi*100, Wait.ABORT_WHEN_FALSE)
+    wait(random.uniform(mvmt_min_wait, mvmt_max_wait)/speed_current*100, Wait.ABORT_WHEN_FALSE)
 
     if RULE_CONDITION:
         goto RULE_START
@@ -4490,30 +4492,44 @@ rule "Bot Pressure: Unkillable Bot Took Damage":
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
 
-# Speed Mode
-rule "Speed Mode: Kill Action (JPYHG)":
+# Speed Mode Single Timer
+rule "Speed Mode: Kill Action Single Timer (JPYHG)":
     @Event playerDealtFinalBlow
     @Team 1
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode == 1
 
     speed_kill_count += 1
     if speed_kill_count == speed_kill_target:
         speed_kill_count = 0
-        speed_multi += speed_increment
-        if speed_multi > speed_score:
-            speed_score = speed_multi
+        speed_current += speed_increment
+        if speed_current > speed_score:
+            speed_score = speed_current
         speed_mode_timer_reset()
+
+# Speed Mode Multi Timer
+rule "Speed Mode: Kill Action Multi Timer (JPYHG)":
+    @Event playerDealtFinalBlow
+    @Team 1
+    @Condition speed_mode == 2
+
+    speed_kill_count += 1
+    if speed_kill_count == speed_kill_target:
+        speed_kill_count = 0
+        speed_current += speed_increment
+        if speed_current > speed_score:
+            speed_score = speed_current
+    speed_mode_timer_reset()
 
 
 rule "Speed Mode: Timer Action (JPYHG)":
     @Condition speed_timer == 0
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
 
     speed_kill_count = 0
-    if (speed_multi - speed_increment) > speed_base:
-        speed_multi -= speed_decrement
+    if (speed_current - speed_increment) > speed_base:
+        speed_current -= speed_decrement
     else:
-        speed_multi = speed_base
+        speed_current = speed_base
     speed_mode_timer_reset()
 
 
@@ -4522,7 +4538,7 @@ rule "Speed Mode: Hack Lucio (JPYHG)":
     @Team 2
     @Hero lucio
     @Condition eventPlayer.isAlive() == true
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
 
     eventPlayer.setStatusEffect(eventPlayer,Status.HACKED,9999)
 
@@ -4542,10 +4558,10 @@ def speed_mode_timer_reset():
 
     #smallMessage(hostPlayer, "test3")
     if speed_player == true:
-        eventPlayer.custom_speed = speed_multi
+        eventPlayer.custom_speed = speed_current
         if eventPlayer.menu_visible == false:
-            getPlayers(Team.1).setMoveSpeed(speed_multi)
-    getPlayers(Team.2).setMoveSpeed(speed_multi)
+            getPlayers(Team.1).setMoveSpeed(speed_current)
+    getPlayers(Team.2).setMoveSpeed(speed_current)
     speed_timer = speed_max_time
     chase(speed_timer, 0, rate=1, ChaseReeval.NONE)
 
