@@ -62,7 +62,7 @@ globalvar custom_strafe_points
 globalvar custom_bot_speed
 globalvar default_bot_diff
 globalvar bounce_amount
-globalvar strafe_relatvity
+globalvar strafe_relativity
 ## Bot Hero Variables
 globalvar hero_array
 globalvar hero_array_index
@@ -341,6 +341,7 @@ subroutine menu_act_toggle_hs
 subroutine menu_act_cycle_pattern
 subroutine menu_act_cycle_min_dist
 subroutine menu_act_cycle_max_dist
+subroutine menu_act_toggle_strafe_rel
 subroutine menu_act_cycle_points
 subroutine menu_act_cycle_difficulty
 subroutine menu_act_cycle_min_wait
@@ -680,7 +681,7 @@ rule "Initialize: Workshop Settings":
     custom_max_dist = createWorkshopSetting(int[0:200], "3.1. Bot Movement Modifiers", "Custom Distance Maximum Distance", 200, 11)
     custom_strafe_points = createWorkshopSetting(int[1:8], "3.1. Bot Movement Modifiers", "Fixed Shape Points", 2, 12)
     bounce_amount = createWorkshopSetting(int[0:100], "3.1. Bot Movement Modifiers", "Bouncing Bots (0 = off)", 0, 13)
-    strafe_relatvity = createWorkshopSetting(enum["To Player", "To World"], "3.1. Bot Movement Modifiers", "AD Strafe Relativity", 0, 14)
+
     # Pressure Mode
     #pressure_type = createWorkshopSetting(enum["off", "killable", "unkillable"], "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Apply Pressure", 0, 0)
     #pressure_accuracy = createWorkshopSetting(int[1:100],  "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Pressure Difficulty", 50, 1)
@@ -1949,13 +1950,14 @@ def default_player_menu():
         eventPlayer.menu_opt_status[player_default_var] = 0
         ## Strafe Pattern
         player_default_var += 1
-        eventPlayer.menu_opt_var[player_default_var] = "Player"
-        eventPlayer.menu_opt_status[player_default_var] = 0
-        ## Strafe Pattern
-        player_default_var += 1
         eventPlayer.menu_opt_var[player_default_var] = opt_array_movement[0][default_mvmt_type]
         eventPlayer.menu_opt_status[player_default_var] = default_mvmt_type
         eventPlayer.menu_opt_len[player_default_var] = len(opt_array_movement[0]) - 1
+        ## Strafe Relativity
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "Player"
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Min Dist Cycle
         player_default_var += 1
         eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(custom_min_dist)
@@ -2281,13 +2283,20 @@ def menu_hud():
     menu_on_opt_title[menu_opt_size] = menu_off_opt_title[menu_opt_size]
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
     new_menu_item_selection()
-
+    
     ## Strafe Pattern
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Strafe Pattern"
     menu_on_opt_title[menu_opt_size] = "Pattern: "
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
     new_menu_item_cycle()
+
+    ## Strafe Relativity
+    increment_for_menu_item()
+    menu_off_opt_title[menu_opt_size] = "Strafe Relativity"
+    menu_on_opt_title[menu_opt_size] = "Relativity: "
+    menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
+    new_menu_item_toggle()
 
     ## Custom Min Dist Cycle
     increment_for_menu_item()
@@ -2390,7 +2399,6 @@ def menu_hud():
         menu_off_opt_title[menu_opt_size] = "Slot 0 Hero Pool"
     menu_on_opt_title[menu_opt_size] = ""
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
-    menu_hero_bar_color_set()
 
     new_menu_item_cycle_bar()
 
@@ -2614,28 +2622,30 @@ rule "Menu Actions: Input Read":
         elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
             menu_act_cycle_pattern()
         elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value:
+            menu_act_toggle_strafe_rel()
+        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
             menu_act_cycle_min_dist()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_max_dist()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
-            menu_act_cycle_points()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
-            menu_act_cycle_difficulty()
+            menu_act_cycle_points()
         elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value:
+            menu_act_cycle_difficulty()
+        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value:
             menu_act_cycle_min_wait()
             eventPlayer.menu_wait = 0.02
-        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 8 + eventPlayer.menu_substart_value:
             menu_act_cycle_max_wait()
             eventPlayer.menu_wait = 0.02
-        elif eventPlayer.menu_index == 8 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 9 + eventPlayer.menu_substart_value:
             menu_act_cycle_bot_speed()
             if eventPlayer.menu_opt_value > 200:
                 eventPlayer.menu_wait = 0.01
             else:
                 eventPlayer.menu_wait = 0.04
-        elif eventPlayer.menu_index == 9 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 10 + eventPlayer.menu_substart_value:
             menu_act_cycle_bot_bounce()
             eventPlayer.menu_wait = 0.05
     # Spawn Submenu
@@ -3013,21 +3023,40 @@ def menu_act_cycle_pattern():
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = opt_array_movement[0][eventPlayer.menu_opt_value]
     default_mvmt_type = eventPlayer.menu_opt_value
 
-    if eventPlayer.menu_opt_value == 4:
+    if eventPlayer.menu_opt_value == 3:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = false
-        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
+    elif eventPlayer.menu_opt_value == 4:
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
     elif eventPlayer.menu_opt_value == 5 or eventPlayer.menu_opt_value == 6:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
-        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = false
     else:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
 
     eventPlayer.menu_reset_bots = true
 
+
+def menu_act_toggle_strafe_rel():
+    @Name "SUB: menu_act_toggle_strafe_rel"
+
+    if strafe_relativity == 0:
+        strafe_relativity = 1
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "World"
+    else:
+        strafe_relativity = 0
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Player"
+    
 
 def menu_act_cycle_min_dist():
     @Name "SUB: menu_act_cycle_min_dist"
@@ -3950,7 +3979,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_PLAYER":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
-    @Condition strafe_relatvity == 0
+    @Condition strafe_relativity == 0
 
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
@@ -3969,7 +3998,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_WORLD":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
-    @Condition strafe_relatvity == 1
+    @Condition strafe_relativity == 1
 
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
