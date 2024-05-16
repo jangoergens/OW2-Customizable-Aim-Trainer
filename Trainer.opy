@@ -35,8 +35,8 @@ settings {
     }
 }
 
-# Global Bariables
-
+# Global Variables
+globalvar player_default_var
 ## Bot Generation Variables
 globalvar bot_index
 globalvar bot_gen_index
@@ -1886,167 +1886,210 @@ def default_player_menu():
     eventPlayer.custom_speed = 100
     eventPlayer.menu_reset_bots = false
 
+    player_default_var = 1
     if privileged_host == true and eventPlayer != hostPlayer:
-        eventPlayer.menu_label_hidden[1] = true
-        eventPlayer.menu_item_hidden[3] = true
-        eventPlayer.menu_item_hidden[4] = true
-        eventPlayer.menu_item_hidden[5] = true
+        eventPlayer.menu_label_hidden[player_default_var] = true
+        player_default_var += 2
+        eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_item_hidden[player_default_var] = true
 
+    player_default_var += 2
     # Projectile Guide
-    eventPlayer.menu_opt_var[7] = "Guide Off"
-    eventPlayer.menu_opt_status[7] = 0
-    eventPlayer.menu_opt_len[7] = len(opt_array_abilities) - 1
+    eventPlayer.menu_opt_var[player_default_var] = "Guide Off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
+    eventPlayer.menu_opt_len[player_default_var] = len(opt_array_abilities) - 1
     ## Mercy Damage Boost Toggle
-    eventPlayer.menu_opt_var[8] = "off"
-    eventPlayer.menu_opt_status[8] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Ana Nano Boost Toggle
-    eventPlayer.menu_opt_var[9] = "off"
-    eventPlayer.menu_opt_status[9] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Kitsune Toggle
-    eventPlayer.menu_opt_var[10] = "off"
-    eventPlayer.menu_opt_status[10] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Show Recall
-    eventPlayer.menu_opt_var[11] = "off"
-    eventPlayer.menu_opt_status[11] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Return to Main Menu
-    eventPlayer.menu_opt_status[12] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Movement Speed Cycle
-    eventPlayer.menu_index = 13
+    player_default_var += 1
+    eventPlayer.menu_index = player_default_var
     eventPlayer.menu_opt_value = 100
     menu_speed_set_text_and_color()
-    eventPlayer.menu_opt_status[13] = 100
-    eventPlayer.menu_opt_len[13] = 1000
+    eventPlayer.menu_opt_status[player_default_var] = 100
+    eventPlayer.menu_opt_len[player_default_var] = 1000
     ## Infinite Ammo Toggle
-    eventPlayer.menu_opt_var[14] = "off"
-    eventPlayer.menu_opt_status[14] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## No Strafing Stun
-    eventPlayer.menu_opt_var[15] = "off"
-    eventPlayer.menu_opt_status[15] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## HS Only
-    eventPlayer.menu_opt_var[16] = "off"
-    eventPlayer.menu_opt_status[16] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
 
     if privileged_host == false or eventPlayer == hostPlayer:
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[17] = 0
+        player_default_var = 17
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Strafe Pattern
-        eventPlayer.menu_opt_var[18] = opt_array_movement[0][default_mvmt_type]
-        eventPlayer.menu_opt_status[18] = default_mvmt_type
-        eventPlayer.menu_opt_len[18] = len(opt_array_movement[0]) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "Player"
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        ## Strafe Pattern
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_movement[0][default_mvmt_type]
+        eventPlayer.menu_opt_status[player_default_var] = default_mvmt_type
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_movement[0]) - 1
         ## Custom Min Dist Cycle
-        eventPlayer.menu_opt_var[19] = "{0} m".format(custom_min_dist)
-        eventPlayer.menu_opt_status[19] = custom_min_dist
-        eventPlayer.menu_opt_len[19] = 200
-        eventPlayer.menu_item_hidden[19] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(custom_min_dist)
+        eventPlayer.menu_opt_status[player_default_var] = custom_min_dist
+        eventPlayer.menu_opt_len[player_default_var] = 200
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Dist Cycle
-        eventPlayer.menu_opt_var[20] = "{0} m".format(custom_max_dist)
-        eventPlayer.menu_opt_status[20] = custom_max_dist
-        eventPlayer.menu_opt_len[20] = 200
-        eventPlayer.menu_item_hidden[20] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(custom_max_dist)
+        eventPlayer.menu_opt_status[player_default_var] = custom_max_dist
+        eventPlayer.menu_opt_len[player_default_var] = 200
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Dist Cycle
-        eventPlayer.menu_opt_var[21] = custom_strafe_points
-        eventPlayer.menu_opt_status[21] = custom_strafe_points - 1
-        eventPlayer.menu_opt_len[21] = 99
-        eventPlayer.menu_item_hidden[21] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = custom_strafe_points
+        eventPlayer.menu_opt_status[player_default_var] = custom_strafe_points - 1
+        eventPlayer.menu_opt_len[player_default_var] = 99
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Strafe Difficulty
-        eventPlayer.menu_opt_var[22] = opt_array_movement[1][default_bot_diff]
-        eventPlayer.menu_opt_status[22] = default_bot_diff
-        eventPlayer.menu_opt_len[22] = len(opt_array_movement[1]) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_movement[1][default_bot_diff]
+        eventPlayer.menu_opt_status[player_default_var] = default_bot_diff
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_movement[1]) - 1
         ## Custom Min Wait Cycle
-        eventPlayer.menu_opt_var[23] = "{0} s".format(custom_min_wait)
-        eventPlayer.menu_item_hidden[23] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(custom_min_wait)
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Wait Cycle
-        eventPlayer.menu_opt_var[24] = "{0} s".format(custom_max_wait)
-        eventPlayer.menu_item_hidden[24] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(custom_max_wait)
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Bot Speed
-        eventPlayer.menu_index = 25
+        player_default_var += 1
+        eventPlayer.menu_index = player_default_var
         eventPlayer.menu_opt_value = custom_bot_speed
         menu_speed_set_text_and_color()
-        eventPlayer.menu_opt_status[25] = custom_bot_speed
-        eventPlayer.menu_opt_len[25] = 1000
-        ## Boucing Bots
+        eventPlayer.menu_opt_status[player_default_var] = custom_bot_speed
+        eventPlayer.menu_opt_len[player_default_var] = 1000
+        ## Bouncing Bots
+        player_default_var += 1
         if bounce_amount == 0:
-            eventPlayer.menu_opt_var[26] = "off"
+            eventPlayer.menu_opt_var[player_default_var] = "off"
         else:
-            eventPlayer.menu_opt_var[26] = bounce_amount
-        eventPlayer.menu_opt_status[26] = bounce_amount
-        eventPlayer.menu_opt_len[26] = 100
+            eventPlayer.menu_opt_var[player_default_var] = bounce_amount
+        eventPlayer.menu_opt_status[player_default_var] = bounce_amount
+        eventPlayer.menu_opt_len[player_default_var] = 100
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[27] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Number of Bots
-        eventPlayer.menu_opt_var[28] = bot_count
-        eventPlayer.menu_opt_status[28] = bot_count
-        eventPlayer.menu_opt_len[28] = 12
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = bot_count
+        eventPlayer.menu_opt_status[player_default_var] = bot_count
+        eventPlayer.menu_opt_len[player_default_var] = 12
         ## Custom Spawn Toggle
-        eventPlayer.menu_opt_var[29] = opt_array_spawn_strings[spawn_type]
-        eventPlayer.menu_opt_status[29] = spawn_type
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_spawn_strings[spawn_type]
+        eventPlayer.menu_opt_status[player_default_var] = spawn_type
         ## Bot Slot Cycle
-        eventPlayer.menu_opt_var[30] = 0
-        eventPlayer.menu_opt_status[30] = 0
-        eventPlayer.menu_opt_len[30] = 5
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = 0
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_opt_len[player_default_var] = 5
         if spawn_type == 0:
-            eventPlayer.menu_item_hidden[30] = true
+            eventPlayer.menu_item_hidden[player_default_var] = true
         ## Slot Hero Pool
+        player_default_var += 1
         if hero_array_status[0] != "on":
-            eventPlayer.menu_opt_var[31] = "{0} : off".format(hero_array[0])
+            eventPlayer.menu_opt_var[player_default_var] = "{0} : off".format(hero_array[0])
         else:
-            eventPlayer.menu_opt_var[31] = "{0} : on".format(hero_array[0])
-        menu_on_opt_color[31] = default_menu_on_index_color
-        eventPlayer.bar_title[31] = ""
-        eventPlayer.bar_var[31] = heroIcon(hero_array[0])
-        eventPlayer.menu_opt_status[31] = 0
-        eventPlayer.menu_opt_len[31] = len(hero_array) - 1
-        eventPlayer.menu_index = 31
+            eventPlayer.menu_opt_var[player_default_var] = "{0} : on".format(hero_array[0])
+        menu_on_opt_color[player_default_var] = default_menu_on_index_color
+        eventPlayer.bar_title[player_default_var] = ""
+        eventPlayer.bar_var[player_default_var] = heroIcon(hero_array[0])
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_opt_len[player_default_var] = len(hero_array) - 1
+        eventPlayer.menu_index = player_default_var
         menu_hero_bar_color_set()
-        eventPlayer.menu_opt_status[31] = 0
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Spawn Radius Cycle
-        eventPlayer.menu_opt_var[32] = "{0} m".format(spawn_radius)
-        eventPlayer.menu_opt_status[32] = spawn_radius
-        eventPlayer.menu_opt_len[32] = 100
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(spawn_radius)
+        eventPlayer.menu_opt_status[player_default_var] = spawn_radius
+        eventPlayer.menu_opt_len[player_default_var] = 100
         ## Set Spawn Point
-        eventPlayer.menu_opt_status[33] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[34] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Pressure Mode Toggle
-        eventPlayer.menu_opt_var[35] = opt_array_pressure[pressure_type]
-        eventPlayer.menu_opt_status[35] = pressure_type
-        eventPlayer.menu_opt_len[35] = len(opt_array_pressure) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_pressure[pressure_type]
+        eventPlayer.menu_opt_status[player_default_var] = pressure_type
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_pressure) - 1
         ## Pressure Mode Accuracy
-        eventPlayer.menu_opt_var[36] = "{0}%".format(pressure_accuracy)
-        eventPlayer.menu_index = 36
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(pressure_accuracy)
+        eventPlayer.menu_index = player_default_var
         menu_pressure_cycle_color_set()
-        eventPlayer.menu_opt_status[36] = pressure_accuracy
-        eventPlayer.menu_opt_len[36] = 99
+        eventPlayer.menu_opt_status[player_default_var] = pressure_accuracy
+        eventPlayer.menu_opt_len[player_default_var] = 99
         if pressure_type == 0:
-            eventPlayer.menu_item_hidden[36] = true
-        ## Speed Mode Toggle
-        if speed_mode_enabled == true:
-            eventPlayer.menu_opt_var[37] = "on"
-            eventPlayer.menu_opt_status[37] = 1
-        else:
-            eventPlayer.menu_opt_var[37] = "off"
-            eventPlayer.menu_opt_status[37] = 0
-
-        eventPlayer.menu_opt_var[38] = "{0} s".format(speed_max_time)
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[38] = true
-
-        eventPlayer.menu_opt_var[39] = "{0}%".format(speed_increment)
-        eventPlayer.menu_opt_status[39] = speed_increment
-        eventPlayer.menu_opt_len[39] = 100
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[39] = true
-
-        eventPlayer.menu_opt_var[40] = "{0}%".format(speed_decrement)
-        eventPlayer.menu_opt_status[40] = speed_decrement
-        eventPlayer.menu_opt_len[40] = 100
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[40] = true
-
-        eventPlayer.menu_opt_var[41] = "{0}".format(speed_kill_target)
-        eventPlayer.menu_opt_len[41] = 99
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[41] = true
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        ## Speed Mode Cycle
+        player_default_var += 1
+        eventPlayer.menu_opt_len[player_default_var] = 2
+        if speed_mode == 0:
+            eventPlayer.menu_opt_var[player_default_var] = "off"
+            eventPlayer.menu_opt_status[player_default_var] = 0
+        else if speed_mode == 1:
+            eventPlayer.menu_opt_var[player_default_var] = "single timer"
+            eventPlayer.menu_opt_status[player_default_var] = 1
+        else if speed_mode == 2:
+            eventPlayer.menu_opt_var[player_default_var] = "multi timer"
+            eventPlayer.menu_opt_status[player_default_var] = 2
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(speed_max_time)
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(speed_increment)
+        eventPlayer.menu_opt_status[player_default_var] = speed_increment
+        eventPlayer.menu_opt_len[player_default_var] = 100
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(speed_decrement)
+        eventPlayer.menu_opt_status[player_default_var] = speed_decrement
+        eventPlayer.menu_opt_len[player_default_var] = 100
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}".format(speed_kill_target)
+        eventPlayer.menu_opt_len[player_default_var] = 99
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
 
     eventPlayer.menu_index = 0
     eventPlayer.menu_opt_value = 0
@@ -2292,7 +2335,7 @@ def menu_hud():
     menu_speed_set_text_and_color()
     new_menu_item_cycle()
 
-    ## Boucing Bots
+    ## Bouncing Bots
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Bouncing Bots"
     menu_on_opt_title[menu_opt_size] = "Bounce: "
@@ -2521,6 +2564,7 @@ rule "Menu Actions: Input Read":
     eventPlayer.menu_opt_value = eventPlayer.menu_opt_status[eventPlayer.menu_index]
     eventPlayer.menu_wait = 0.1
 
+    # Change Hero Submenu
     if eventPlayer.submenu_index == 0:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_change_hero()
@@ -2534,6 +2578,7 @@ rule "Menu Actions: Input Read":
             menu_act_toggle_spawn_menu()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
             menu_act_toggle_game_modes()
+    # Assists Submenu
     elif eventPlayer.submenu_index == 1:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_assists_menu()
@@ -2547,6 +2592,7 @@ rule "Menu Actions: Input Read":
             menu_act_toggle_kitsune()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
             menu_act_toggle_recall()
+    # Modifiers Submenu
     elif eventPlayer.submenu_index == 2:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_modifiers_menu()
@@ -2563,6 +2609,7 @@ rule "Menu Actions: Input Read":
             eventPlayer.menu_wait = 0.02
         elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_toggle_hs()
+    # Movement Submenu
     elif eventPlayer.submenu_index == 3:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_movement_menu()
@@ -2593,7 +2640,7 @@ rule "Menu Actions: Input Read":
         elif eventPlayer.menu_index == 9 + eventPlayer.menu_substart_value:
             menu_act_cycle_bot_bounce()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
+    # Spawn Submenu
     elif eventPlayer.submenu_index == 4:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_spawn_menu()
@@ -2610,6 +2657,7 @@ rule "Menu Actions: Input Read":
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value:
             menu_act_set_spawn_pt()
+    # Game Mode Submenu
     elif eventPlayer.submenu_index == 5:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_game_modes()
