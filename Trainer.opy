@@ -35,8 +35,8 @@ settings {
     }
 }
 
-# Global Bariables
-
+# Global Variables
+globalvar player_default_var
 ## Bot Generation Variables
 globalvar bot_index
 globalvar bot_gen_index
@@ -62,7 +62,7 @@ globalvar custom_strafe_points
 globalvar custom_bot_speed
 globalvar default_bot_diff
 globalvar bounce_amount
-globalvar strafe_relatvity
+globalvar strafe_relativity
 ## Bot Hero Variables
 globalvar hero_array
 globalvar hero_array_index
@@ -100,9 +100,9 @@ globalvar pressure_type
 globalvar pressure_accuracy
 globalvar pressure_beam
 ## Speed Mode Variables
-globalvar speed_mode_enabled
+globalvar speed_mode
 globalvar speed_timer
-globalvar speed_multi
+globalvar speed_current
 globalvar speed_score
 globalvar speed_base
 globalvar speed_increment
@@ -341,6 +341,7 @@ subroutine menu_act_toggle_hs
 subroutine menu_act_cycle_pattern
 subroutine menu_act_cycle_min_dist
 subroutine menu_act_cycle_max_dist
+subroutine menu_act_toggle_strafe_rel
 subroutine menu_act_cycle_points
 subroutine menu_act_cycle_difficulty
 subroutine menu_act_cycle_min_wait
@@ -357,7 +358,7 @@ subroutine menu_act_set_spawn_pt
 #### Submenu 5
 subroutine menu_act_cycle_pressure_mode
 subroutine menu_act_cycle_accuracy
-subroutine menu_act_toggle_speed
+subroutine menu_act_cycle_speed
 subroutine menu_act_cycle_timer
 subroutine menu_act_cycle_increment
 subroutine menu_act_cycle_decrement
@@ -680,7 +681,7 @@ rule "Initialize: Workshop Settings":
     custom_max_dist = createWorkshopSetting(int[0:200], "3.1. Bot Movement Modifiers", "Custom Distance Maximum Distance", 200, 11)
     custom_strafe_points = createWorkshopSetting(int[1:8], "3.1. Bot Movement Modifiers", "Fixed Shape Points", 2, 12)
     bounce_amount = createWorkshopSetting(int[0:100], "3.1. Bot Movement Modifiers", "Bouncing Bots (0 = off)", 0, 13)
-    strafe_relatvity = createWorkshopSetting(enum["To Player", "To World"], "3.1. Bot Movement Modifiers", "AD Strafe Relativity", 0, 14)
+
     # Pressure Mode
     #pressure_type = createWorkshopSetting(enum["off", "killable", "unkillable"], "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Apply Pressure", 0, 0)
     #pressure_accuracy = createWorkshopSetting(int[1:100],  "4. Bot Pressure (Overridden by in-game changes to pressure)", "Bots Pressure Difficulty", 50, 1)
@@ -691,7 +692,7 @@ rule "Initialize: Workshop Settings":
     punish_deaths = createWorkshopSetting(bool, "4.1. Bot Pressure Modifiers (killable mode only)", "Punish player deaths (player is stunned and attacker recovers health)", true, 2)
 
     # Speed Mode
-    speed_mode_enabled = createWorkshopSetting(bool, "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Increase Bots Movement Speed Every Elimination (JPYHG)", false, 0)
+    speed_mode = createWorkshopSetting(enum["off", "single timer", "multi timer"], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Increase Bots Movement Speed Every Elimination (JPYHG)", 0, 0)
     speed_player = createWorkshopSetting(bool, "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Applies to Player", false, 1)
     speed_max_time = createWorkshopSetting(float[0:300], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Mode Timer (s)", 10, 2)
     speed_base = createWorkshopSetting(int[0:1000], "5. Bot Speed Mode (Overridden by in-game changes to Speed Mode)", "Speed Mode Base Speed (%)", 100, 3)
@@ -1304,6 +1305,9 @@ rule "Initialize: Static Global Variables Part 2":
     hero_react_stun[hero_array_index] = [0.00, 0.00, 0.00, 0.00, 0.00]
     hero_name_array[hero_array_index] = "Jjonak"
 
+    # Initialize speed mode variables
+    speed_score = speed_base
+
     data_loaded[0] = true
 
 
@@ -1432,14 +1436,14 @@ def stats_hud():
     "Deaths:  {0}".format(localPlayer.stat_deaths), HudPosition.LEFT, 0.11, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudSubtext([i for i in localPlayer if pressure_type != 0],
     "Net Damage:  {0}".format(localPlayer.stat_dmg_dealt - localPlayer.stat_dmg_taken), HudPosition.LEFT, 0.51, Color.PURPLE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "\nSpeed High Score:  {0}%".format(speed_score), HudPosition.RIGHT, -0.99, Color.BLACK, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
-    "Speed Multiplier:  {0}%".format(speed_multi), HudPosition.RIGHT,  -0.98, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
+    "Current Speed:  {0}%".format(speed_current), HudPosition.RIGHT,  -0.98, Color.LIME_GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "Kills:  {0} / {1}".format(speed_kill_count, speed_kill_target), HudPosition.RIGHT,  -0.97, Color.RED, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     #Speed Mode Data
-    hudSubtext([i for i in localPlayer if speed_mode_enabled == true],
+    hudSubtext([i for i in localPlayer if speed_mode > 0],
     "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{0}".format(speed_timer), HudPosition.TOP, 666, Color.GREEN, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
@@ -1593,7 +1597,7 @@ rule "Menu Controls: Toggle On Setup":
     eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.setMoveSpeed(0)
 
-    if speed_mode_enabled == true and eventPlayer == hostPlayer:
+    if speed_mode > 0 and eventPlayer == hostPlayer:
         stopChasingVariable(speed_timer)
 
 rule "Menu Controls: Toggle Off Setup Player":
@@ -1619,7 +1623,7 @@ rule "Menu Controls: Toggle Off Setup Game":
             smallMessage(getAllPlayers(), "    Creating New Bots...")
             create_all_bots()
         eventPlayer.menu_reset_bots = false
-    if speed_mode_enabled == true and eventPlayer == hostPlayer:
+    if speed_mode > 0 and eventPlayer == hostPlayer:
         chase(speed_timer, 0, rate=1, ChaseReeval.NONE)
 
 
@@ -1886,167 +1890,211 @@ def default_player_menu():
     eventPlayer.custom_speed = 100
     eventPlayer.menu_reset_bots = false
 
+    player_default_var = 1
     if privileged_host == true and eventPlayer != hostPlayer:
-        eventPlayer.menu_label_hidden[1] = true
-        eventPlayer.menu_item_hidden[3] = true
-        eventPlayer.menu_item_hidden[4] = true
-        eventPlayer.menu_item_hidden[5] = true
+        eventPlayer.menu_label_hidden[player_default_var] = true
+        player_default_var += 2
+        eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_item_hidden[player_default_var] = true
 
+    player_default_var += 2
     # Projectile Guide
-    eventPlayer.menu_opt_var[7] = "Guide Off"
-    eventPlayer.menu_opt_status[7] = 0
-    eventPlayer.menu_opt_len[7] = len(opt_array_abilities) - 1
+    eventPlayer.menu_opt_var[player_default_var] = "Guide Off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
+    eventPlayer.menu_opt_len[player_default_var] = len(opt_array_abilities) - 1
     ## Mercy Damage Boost Toggle
-    eventPlayer.menu_opt_var[8] = "off"
-    eventPlayer.menu_opt_status[8] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Ana Nano Boost Toggle
-    eventPlayer.menu_opt_var[9] = "off"
-    eventPlayer.menu_opt_status[9] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Kitsune Toggle
-    eventPlayer.menu_opt_var[10] = "off"
-    eventPlayer.menu_opt_status[10] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Show Recall
-    eventPlayer.menu_opt_var[11] = "off"
-    eventPlayer.menu_opt_status[11] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Return to Main Menu
-    eventPlayer.menu_opt_status[12] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## Movement Speed Cycle
-    eventPlayer.menu_index = 13
+    player_default_var += 1
+    eventPlayer.menu_index = player_default_var
     eventPlayer.menu_opt_value = 100
     menu_speed_set_text_and_color()
-    eventPlayer.menu_opt_status[13] = 100
-    eventPlayer.menu_opt_len[13] = 1000
+    eventPlayer.menu_opt_status[player_default_var] = 100
+    eventPlayer.menu_opt_len[player_default_var] = 1000
     ## Infinite Ammo Toggle
-    eventPlayer.menu_opt_var[14] = "off"
-    eventPlayer.menu_opt_status[14] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## No Strafing Stun
-    eventPlayer.menu_opt_var[15] = "off"
-    eventPlayer.menu_opt_status[15] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
     ## HS Only
-    eventPlayer.menu_opt_var[16] = "off"
-    eventPlayer.menu_opt_status[16] = 0
+    player_default_var += 1
+    eventPlayer.menu_opt_var[player_default_var] = "off"
+    eventPlayer.menu_opt_status[player_default_var] = 0
 
     if privileged_host == false or eventPlayer == hostPlayer:
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[17] = 0
+        player_default_var = 17
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Strafe Pattern
-        eventPlayer.menu_opt_var[18] = opt_array_movement[0][default_mvmt_type]
-        eventPlayer.menu_opt_status[18] = default_mvmt_type
-        eventPlayer.menu_opt_len[18] = len(opt_array_movement[0]) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_movement[0][default_mvmt_type]
+        eventPlayer.menu_opt_status[player_default_var] = default_mvmt_type
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_movement[0]) - 1
+        ## Strafe Relativity
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "Player"
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Min Dist Cycle
-        eventPlayer.menu_opt_var[19] = "{0} m".format(custom_min_dist)
-        eventPlayer.menu_opt_status[19] = custom_min_dist
-        eventPlayer.menu_opt_len[19] = 200
-        eventPlayer.menu_item_hidden[19] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(custom_min_dist)
+        eventPlayer.menu_opt_status[player_default_var] = custom_min_dist
+        eventPlayer.menu_opt_len[player_default_var] = 200
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Dist Cycle
-        eventPlayer.menu_opt_var[20] = "{0} m".format(custom_max_dist)
-        eventPlayer.menu_opt_status[20] = custom_max_dist
-        eventPlayer.menu_opt_len[20] = 200
-        eventPlayer.menu_item_hidden[20] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(custom_max_dist)
+        eventPlayer.menu_opt_status[player_default_var] = custom_max_dist
+        eventPlayer.menu_opt_len[player_default_var] = 200
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Dist Cycle
-        eventPlayer.menu_opt_var[21] = custom_strafe_points
-        eventPlayer.menu_opt_status[21] = custom_strafe_points - 1
-        eventPlayer.menu_opt_len[21] = 99
-        eventPlayer.menu_item_hidden[21] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = custom_strafe_points
+        eventPlayer.menu_opt_status[player_default_var] = custom_strafe_points - 1
+        eventPlayer.menu_opt_len[player_default_var] = 99
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Strafe Difficulty
-        eventPlayer.menu_opt_var[22] = opt_array_movement[1][default_bot_diff]
-        eventPlayer.menu_opt_status[22] = default_bot_diff
-        eventPlayer.menu_opt_len[22] = len(opt_array_movement[1]) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_movement[1][default_bot_diff]
+        eventPlayer.menu_opt_status[player_default_var] = default_bot_diff
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_movement[1]) - 1
         ## Custom Min Wait Cycle
-        eventPlayer.menu_opt_var[23] = "{0} s".format(custom_min_wait)
-        eventPlayer.menu_item_hidden[23] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(custom_min_wait)
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Custom Max Wait Cycle
-        eventPlayer.menu_opt_var[24] = "{0} s".format(custom_max_wait)
-        eventPlayer.menu_item_hidden[24] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(custom_max_wait)
+        eventPlayer.menu_item_hidden[player_default_var] = true
         ## Bot Speed
-        eventPlayer.menu_index = 25
+        player_default_var += 1
+        eventPlayer.menu_index = player_default_var
         eventPlayer.menu_opt_value = custom_bot_speed
         menu_speed_set_text_and_color()
-        eventPlayer.menu_opt_status[25] = custom_bot_speed
-        eventPlayer.menu_opt_len[25] = 1000
-        ## Boucing Bots
+        eventPlayer.menu_opt_status[player_default_var] = custom_bot_speed
+        eventPlayer.menu_opt_len[player_default_var] = 1000
+        ## Bouncing Bots
+        player_default_var += 1
         if bounce_amount == 0:
-            eventPlayer.menu_opt_var[26] = "off"
+            eventPlayer.menu_opt_var[player_default_var] = "off"
         else:
-            eventPlayer.menu_opt_var[26] = bounce_amount
-        eventPlayer.menu_opt_status[26] = bounce_amount
-        eventPlayer.menu_opt_len[26] = 100
+            eventPlayer.menu_opt_var[player_default_var] = bounce_amount
+        eventPlayer.menu_opt_status[player_default_var] = bounce_amount
+        eventPlayer.menu_opt_len[player_default_var] = 100
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[27] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Number of Bots
-        eventPlayer.menu_opt_var[28] = bot_count
-        eventPlayer.menu_opt_status[28] = bot_count
-        eventPlayer.menu_opt_len[28] = 12
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = bot_count
+        eventPlayer.menu_opt_status[player_default_var] = bot_count
+        eventPlayer.menu_opt_len[player_default_var] = 12
         ## Custom Spawn Toggle
-        eventPlayer.menu_opt_var[29] = opt_array_spawn_strings[spawn_type]
-        eventPlayer.menu_opt_status[29] = spawn_type
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_spawn_strings[spawn_type]
+        eventPlayer.menu_opt_status[player_default_var] = spawn_type
         ## Bot Slot Cycle
-        eventPlayer.menu_opt_var[30] = 0
-        eventPlayer.menu_opt_status[30] = 0
-        eventPlayer.menu_opt_len[30] = 5
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = 0
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_opt_len[player_default_var] = 5
         if spawn_type == 0:
-            eventPlayer.menu_item_hidden[30] = true
+            eventPlayer.menu_item_hidden[player_default_var] = true
         ## Slot Hero Pool
+        player_default_var += 1
         if hero_array_status[0] != "on":
-            eventPlayer.menu_opt_var[31] = "{0} : off".format(hero_array[0])
+            eventPlayer.menu_opt_var[player_default_var] = "{0} : off".format(hero_array[0])
         else:
-            eventPlayer.menu_opt_var[31] = "{0} : on".format(hero_array[0])
-        menu_on_opt_color[31] = default_menu_on_index_color
-        eventPlayer.bar_title[31] = ""
-        eventPlayer.bar_var[31] = heroIcon(hero_array[0])
-        eventPlayer.menu_opt_status[31] = 0
-        eventPlayer.menu_opt_len[31] = len(hero_array) - 1
-        eventPlayer.menu_index = 31
+            eventPlayer.menu_opt_var[player_default_var] = "{0} : on".format(hero_array[0])
+        menu_on_opt_color[player_default_var] = default_menu_on_index_color
+        eventPlayer.bar_title[player_default_var] = ""
+        eventPlayer.bar_var[player_default_var] = heroIcon(hero_array[0])
+        eventPlayer.menu_opt_status[player_default_var] = 0
+        eventPlayer.menu_opt_len[player_default_var] = len(hero_array) - 1
+        eventPlayer.menu_index = player_default_var
         menu_hero_bar_color_set()
-        eventPlayer.menu_opt_status[31] = 0
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Spawn Radius Cycle
-        eventPlayer.menu_opt_var[32] = "{0} m".format(spawn_radius)
-        eventPlayer.menu_opt_status[32] = spawn_radius
-        eventPlayer.menu_opt_len[32] = 100
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} m".format(spawn_radius)
+        eventPlayer.menu_opt_status[player_default_var] = spawn_radius
+        eventPlayer.menu_opt_len[player_default_var] = 100
         ## Set Spawn Point
-        eventPlayer.menu_opt_status[33] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Return to Main Menu
-        eventPlayer.menu_opt_status[34] = 0
+        player_default_var += 1
+        eventPlayer.menu_opt_status[player_default_var] = 0
         ## Pressure Mode Toggle
-        eventPlayer.menu_opt_var[35] = opt_array_pressure[pressure_type]
-        eventPlayer.menu_opt_status[35] = pressure_type
-        eventPlayer.menu_opt_len[35] = len(opt_array_pressure) - 1
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = opt_array_pressure[pressure_type]
+        eventPlayer.menu_opt_status[player_default_var] = pressure_type
+        eventPlayer.menu_opt_len[player_default_var] = len(opt_array_pressure) - 1
         ## Pressure Mode Accuracy
-        eventPlayer.menu_opt_var[36] = "{0}%".format(pressure_accuracy)
-        eventPlayer.menu_index = 36
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(pressure_accuracy)
+        eventPlayer.menu_index = player_default_var
         menu_pressure_cycle_color_set()
-        eventPlayer.menu_opt_status[36] = pressure_accuracy
-        eventPlayer.menu_opt_len[36] = 99
+        eventPlayer.menu_opt_status[player_default_var] = pressure_accuracy
+        eventPlayer.menu_opt_len[player_default_var] = 99
         if pressure_type == 0:
-            eventPlayer.menu_item_hidden[36] = true
-        ## Speed Mode Toggle
-        if speed_mode_enabled == true:
-            eventPlayer.menu_opt_var[37] = "on"
-            eventPlayer.menu_opt_status[37] = 1
-        else:
-            eventPlayer.menu_opt_var[37] = "off"
-            eventPlayer.menu_opt_status[37] = 0
-
-        eventPlayer.menu_opt_var[38] = "{0} s".format(speed_max_time)
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[38] = true
-
-        eventPlayer.menu_opt_var[39] = "{0}%".format(speed_increment)
-        eventPlayer.menu_opt_status[39] = speed_increment
-        eventPlayer.menu_opt_len[39] = 100
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[39] = true
-
-        eventPlayer.menu_opt_var[40] = "{0}%".format(speed_decrement)
-        eventPlayer.menu_opt_status[40] = speed_decrement
-        eventPlayer.menu_opt_len[40] = 100
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[40] = true
-
-        eventPlayer.menu_opt_var[41] = "{0}".format(speed_kill_target)
-        eventPlayer.menu_opt_len[41] = 99
-        if speed_mode_enabled == false:
-            eventPlayer.menu_item_hidden[41] = true
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        ## Speed Mode Cycle
+        player_default_var += 1
+        eventPlayer.menu_opt_len[player_default_var] = 2
+        if speed_mode == 0:
+            eventPlayer.menu_opt_var[player_default_var] = "off"
+            eventPlayer.menu_opt_status[player_default_var] = 0
+        else if speed_mode == 1:
+            eventPlayer.menu_opt_var[player_default_var] = "single timer"
+            eventPlayer.menu_opt_status[player_default_var] = 1
+        else if speed_mode == 2:
+            eventPlayer.menu_opt_var[player_default_var] = "multi timer"
+            eventPlayer.menu_opt_status[player_default_var] = 2
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0} s".format(speed_max_time)
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(speed_increment)
+        eventPlayer.menu_opt_status[player_default_var] = speed_increment
+        eventPlayer.menu_opt_len[player_default_var] = 100
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}%".format(speed_decrement)
+        eventPlayer.menu_opt_status[player_default_var] = speed_decrement
+        eventPlayer.menu_opt_len[player_default_var] = 100
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
+        player_default_var += 1
+        eventPlayer.menu_opt_var[player_default_var] = "{0}".format(speed_kill_target)
+        eventPlayer.menu_opt_len[player_default_var] = 99
+        if speed_mode == 0:
+            eventPlayer.menu_item_hidden[player_default_var] = true
 
     eventPlayer.menu_index = 0
     eventPlayer.menu_opt_value = 0
@@ -2235,13 +2283,20 @@ def menu_hud():
     menu_on_opt_title[menu_opt_size] = menu_off_opt_title[menu_opt_size]
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
     new_menu_item_selection()
-
+    
     ## Strafe Pattern
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Strafe Pattern"
     menu_on_opt_title[menu_opt_size] = "Pattern: "
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
     new_menu_item_cycle()
+
+    ## Strafe Relativity
+    increment_for_menu_item()
+    menu_off_opt_title[menu_opt_size] = "Strafe Relativity"
+    menu_on_opt_title[menu_opt_size] = "Relativity: "
+    menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
+    new_menu_item_toggle()
 
     ## Custom Min Dist Cycle
     increment_for_menu_item()
@@ -2292,7 +2347,7 @@ def menu_hud():
     menu_speed_set_text_and_color()
     new_menu_item_cycle()
 
-    ## Boucing Bots
+    ## Bouncing Bots
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Bouncing Bots"
     menu_on_opt_title[menu_opt_size] = "Bounce: "
@@ -2344,7 +2399,6 @@ def menu_hud():
         menu_off_opt_title[menu_opt_size] = "Slot 0 Hero Pool"
     menu_on_opt_title[menu_opt_size] = ""
     menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
-    menu_hero_bar_color_set()
 
     new_menu_item_cycle_bar()
 
@@ -2401,15 +2455,12 @@ def menu_hud():
 
     new_menu_item_cycle()
 
-    ## Speed Mode Toggle
+    ## Speed Mode Cycle
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Speed Mode"
-    menu_on_opt_title[menu_opt_size] = "Speed: "
-    if speed_mode_enabled == true:
-        menu_on_opt_color[menu_opt_size] = Color.GREEN
-    else:
-        menu_on_opt_color[menu_opt_size] = Color.RED
-    new_menu_item_toggle()
+    menu_on_opt_title[menu_opt_size] = "Speed Mode: "
+    menu_on_opt_color[menu_opt_size] = default_menu_on_index_color
+    new_menu_item_cycle()
 
     increment_for_menu_item()
     menu_off_opt_title[menu_opt_size] = "Speed Timer"
@@ -2459,18 +2510,16 @@ def menu_speed_set_text_and_color():
     elif eventPlayer.menu_opt_value == 175:
         eventPlayer.menu_opt_var[eventPlayer.menu_index] = opt_array_speed[1][5]
         menu_on_opt_color[eventPlayer.menu_index] = opt_array_speed[2][5]
-    else:
-        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "{0} %".format(eventPlayer.menu_opt_value)
-        menu_on_opt_color[eventPlayer.menu_index] = default_menu_on_index_color
 
 
 def menu_hero_bar_color_set():
-    @Name "menu_hero_bar_color_set"
+    @Name "SUB: menu_hero_bar_color_set"
 
     if hero_array_status[eventPlayer.menu_opt_status[eventPlayer.menu_index]] == "on":
         eventPlayer.bar_color[eventPlayer.menu_index] = Color.GREEN
     else:
         eventPlayer.bar_color[eventPlayer.menu_index] = Color.RED
+
 
 def menu_pressure_cycle_color_set():
     @Name "SUB: menu_pressure_cycle_color_set"
@@ -2521,6 +2570,7 @@ rule "Menu Actions: Input Read":
     eventPlayer.menu_opt_value = eventPlayer.menu_opt_status[eventPlayer.menu_index]
     eventPlayer.menu_wait = 0.1
 
+    # Change Hero Submenu
     if eventPlayer.submenu_index == 0:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_change_hero()
@@ -2534,6 +2584,7 @@ rule "Menu Actions: Input Read":
             menu_act_toggle_spawn_menu()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
             menu_act_toggle_game_modes()
+    # Assists Submenu
     elif eventPlayer.submenu_index == 1:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_assists_menu()
@@ -2547,6 +2598,7 @@ rule "Menu Actions: Input Read":
             menu_act_toggle_kitsune()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
             menu_act_toggle_recall()
+    # Modifiers Submenu
     elif eventPlayer.submenu_index == 2:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_modifiers_menu()
@@ -2563,37 +2615,40 @@ rule "Menu Actions: Input Read":
             eventPlayer.menu_wait = 0.02
         elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_toggle_hs()
+    # Movement Submenu
     elif eventPlayer.submenu_index == 3:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_movement_menu()
         elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
             menu_act_cycle_pattern()
         elif eventPlayer.menu_index == 2 + eventPlayer.menu_substart_value:
+            menu_act_toggle_strafe_rel()
+        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
             menu_act_cycle_min_dist()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_max_dist()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
-            menu_act_cycle_points()
         elif eventPlayer.menu_index == 5 + eventPlayer.menu_substart_value:
-            menu_act_cycle_difficulty()
+            menu_act_cycle_points()
         elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value:
+            menu_act_cycle_difficulty()
+        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value:
             menu_act_cycle_min_wait()
             eventPlayer.menu_wait = 0.02
-        elif eventPlayer.menu_index == 7 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 8 + eventPlayer.menu_substart_value:
             menu_act_cycle_max_wait()
             eventPlayer.menu_wait = 0.02
-        elif eventPlayer.menu_index == 8 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 9 + eventPlayer.menu_substart_value:
             menu_act_cycle_bot_speed()
             if eventPlayer.menu_opt_value > 200:
                 eventPlayer.menu_wait = 0.01
             else:
                 eventPlayer.menu_wait = 0.04
-        elif eventPlayer.menu_index == 9 + eventPlayer.menu_substart_value:
+        elif eventPlayer.menu_index == 10 + eventPlayer.menu_substart_value:
             menu_act_cycle_bot_bounce()
             eventPlayer.menu_wait = 0.05
-        elif eventPlayer.menu_index == 1 + eventPlayer.menu_substart_value:
+    # Spawn Submenu
     elif eventPlayer.submenu_index == 4:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_spawn_menu()
@@ -2610,6 +2665,7 @@ rule "Menu Actions: Input Read":
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 6 + eventPlayer.menu_substart_value:
             menu_act_set_spawn_pt()
+    # Game Mode Submenu
     elif eventPlayer.submenu_index == 5:
         if eventPlayer.menu_index == 0 + eventPlayer.menu_substart_value:
             menu_act_toggle_game_modes()
@@ -2619,7 +2675,8 @@ rule "Menu Actions: Input Read":
             menu_act_cycle_accuracy()
             eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 3 + eventPlayer.menu_substart_value:
-            menu_act_toggle_speed()
+            menu_act_cycle_speed()
+            eventPlayer.menu_wait = 0.05
         elif eventPlayer.menu_index == 4 + eventPlayer.menu_substart_value:
             menu_act_cycle_timer()
             eventPlayer.menu_wait = 0.01
@@ -2966,21 +3023,40 @@ def menu_act_cycle_pattern():
     eventPlayer.menu_opt_var[eventPlayer.menu_index] = opt_array_movement[0][eventPlayer.menu_opt_value]
     default_mvmt_type = eventPlayer.menu_opt_value
 
-    if eventPlayer.menu_opt_value == 4:
+    if eventPlayer.menu_opt_value == 3:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = false
-        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
+    elif eventPlayer.menu_opt_value == 4:
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
     elif eventPlayer.menu_opt_value == 5 or eventPlayer.menu_opt_value == 6:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
-        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = false
     else:
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+1] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+2] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
+        eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
 
     eventPlayer.menu_reset_bots = true
 
+
+def menu_act_toggle_strafe_rel():
+    @Name "SUB: menu_act_toggle_strafe_rel"
+
+    if strafe_relativity == 0:
+        strafe_relativity = 1
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "World"
+    else:
+        strafe_relativity = 0
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Player"
+    
 
 def menu_act_cycle_min_dist():
     @Name "SUB: menu_act_cycle_min_dist"
@@ -3375,12 +3451,12 @@ def menu_act_cycle_accuracy():
     menu_pressure_cycle_color_set()
 
 
-def menu_act_toggle_speed():
-    @Name "SUB: menu_act_toggle_speed"
+def menu_act_cycle_speed():
+    @Name "SUB: menu_act_cycle_speed"
 
-    menu_status_io_toggle()
-    if eventPlayer.menu_opt_value == 0:
-        speed_mode_enabled = false
+    menu_status_cycle()
+    speed_mode = eventPlayer.menu_opt_value
+    if speed_mode == 0:
         if speed_player == true:
             eventPlayer.custom_speed = 100
         getPlayers(Team.2).setMoveSpeed(custom_bot_speed)
@@ -3389,10 +3465,9 @@ def menu_act_toggle_speed():
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = true
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = true
         smallMessage(eventPlayer, "    Speed Mode disabled")
+        eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Disabled"
     else:
-        speed_mode_enabled = true
-
-        speed_multi = speed_base
+        speed_current = speed_base
         speed_score = speed_base
         speed_timer = speed_max_time
         if speed_player == true:
@@ -3403,6 +3478,10 @@ def menu_act_toggle_speed():
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+3] = false
         eventPlayer.menu_item_hidden[eventPlayer.menu_index+4] = false
         smallMessage(eventPlayer, "    Speed Mode enabled")
+        if speed_mode == 1:
+            eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Single Timer"
+        else:
+            eventPlayer.menu_opt_var[eventPlayer.menu_index] = "Multi Timer"
 
 
 def menu_act_cycle_timer():
@@ -3667,8 +3746,8 @@ def create_all_bots():
     for bot_gen_index in range(0, bot_count,1):
         create_bot()
         wait(1)
-    if speed_mode_enabled == true:
-        getPlayers(Team.2).setMoveSpeed(speed_multi)
+    if speed_mode > 0:
+        getPlayers(Team.2).setMoveSpeed(speed_current)
     else:
         getPlayers(Team.2).setMoveSpeed(custom_bot_speed)
 
@@ -3836,7 +3915,7 @@ rule "Bot Pathing: Movement Handler: Movement Type 1 default Pathing Speed Off":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 1
-    @Condition speed_mode_enabled == false or speed_strafe_reduction == false
+    @Condition speed_mode == 0 or speed_strafe_reduction == false
 
     change_pathing()
     wait(random.uniform(mvmt_min_wait, mvmt_max_wait), Wait.ABORT_WHEN_FALSE)
@@ -3849,11 +3928,11 @@ rule "Bot Pathing: Movement Handler: Movement Type 1 default Pathing Speed On":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 1
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
     @Condition speed_strafe_reduction == true
 
     change_pathing()
-    wait(random.uniform(mvmt_min_wait, mvmt_max_wait)/speed_multi*100, Wait.ABORT_WHEN_FALSE)
+    wait(random.uniform(mvmt_min_wait, mvmt_max_wait)/speed_current*100, Wait.ABORT_WHEN_FALSE)
 
     if RULE_CONDITION:
         goto RULE_START
@@ -3900,7 +3979,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_PLAYER":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
-    @Condition strafe_relatvity == 0
+    @Condition strafe_relativity == 0
 
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_PLAYER, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
@@ -3919,7 +3998,7 @@ rule "Bot Pathing: Movement Handler - mvmt_type 3 AD Strafes TO_WORLD":
     @Team 2
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.mvmt_type == 3
-    @Condition strafe_relatvity == 1
+    @Condition strafe_relativity == 1
 
     if eventPlayer.bot_pathing_var == 0:
         eventPlayer.startThrottleInDirection(Vector.LEFT, 1, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
@@ -4442,30 +4521,44 @@ rule "Bot Pressure: Unkillable Bot Took Damage":
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
 
 
-# Speed Mode
-rule "Speed Mode: Kill Action (JPYHG)":
+# Speed Mode Single Timer
+rule "Speed Mode: Kill Action Single Timer (JPYHG)":
     @Event playerDealtFinalBlow
     @Team 1
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode == 1
 
     speed_kill_count += 1
     if speed_kill_count == speed_kill_target:
         speed_kill_count = 0
-        speed_multi += speed_increment
-        if speed_multi > speed_score:
-            speed_score = speed_multi
+        speed_current += speed_increment
+        if speed_current > speed_score:
+            speed_score = speed_current
         speed_mode_timer_reset()
+
+# Speed Mode Multi Timer
+rule "Speed Mode: Kill Action Multi Timer (JPYHG)":
+    @Event playerDealtFinalBlow
+    @Team 1
+    @Condition speed_mode == 2
+
+    speed_kill_count += 1
+    if speed_kill_count == speed_kill_target:
+        speed_kill_count = 0
+        speed_current += speed_increment
+        if speed_current > speed_score:
+            speed_score = speed_current
+    speed_mode_timer_reset()
 
 
 rule "Speed Mode: Timer Action (JPYHG)":
     @Condition speed_timer == 0
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
 
     speed_kill_count = 0
-    if (speed_multi - speed_increment) > speed_base:
-        speed_multi -= speed_decrement
+    if (speed_current - speed_increment) > speed_base:
+        speed_current -= speed_decrement
     else:
-        speed_multi = speed_base
+        speed_current = speed_base
     speed_mode_timer_reset()
 
 
@@ -4474,7 +4567,7 @@ rule "Speed Mode: Hack Lucio (JPYHG)":
     @Team 2
     @Hero lucio
     @Condition eventPlayer.isAlive() == true
-    @Condition speed_mode_enabled == true
+    @Condition speed_mode > 0
 
     eventPlayer.setStatusEffect(eventPlayer,Status.HACKED,9999)
 
@@ -4494,10 +4587,10 @@ def speed_mode_timer_reset():
 
     #smallMessage(hostPlayer, "test3")
     if speed_player == true:
-        eventPlayer.custom_speed = speed_multi
+        eventPlayer.custom_speed = speed_current
         if eventPlayer.menu_visible == false:
-            getPlayers(Team.1).setMoveSpeed(speed_multi)
-    getPlayers(Team.2).setMoveSpeed(speed_multi)
+            getPlayers(Team.1).setMoveSpeed(speed_current)
+    getPlayers(Team.2).setMoveSpeed(speed_current)
     speed_timer = speed_max_time
     chase(speed_timer, 0, rate=1, ChaseReeval.NONE)
 
